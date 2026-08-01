@@ -3,12 +3,14 @@
 FastAPI-based governance platform. This README covers local development, Docker, and Vercel container deployment.
 
 ## Quick requirements
+
 - Python 3.11 (recommended)
 - Conda (for the provided Dockerfile) or Docker
 - Docker (for local container testing)
 - Vercel account (for production deploy)
 
 ## Local development (Conda)
+
 1. Create & activate conda env:
 
 ```bash
@@ -26,6 +28,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 Open http://localhost:8000/health to verify.
 
 ## Docker (Container build used by Vercel)
+
 Build and run the image locally:
 
 ```bash
@@ -36,9 +39,11 @@ docker run --rm -p 8000:8000 sentinel-ai-governance
 If the container fails, check the container logs for missing environment variables or runtime errors.
 
 ## Vercel deployment (Container)
+
 This repository contains `vercel.json` that instructs Vercel to build the repository using the `Dockerfile` (container deployment).
 
 Steps:
+
 - Commit and push your branch to the repo.
 - In Vercel dashboard, import the repository and select the `main` branch.
 - Add required environment variables in the Vercel project settings (see list below).
@@ -51,9 +56,11 @@ vercel --prod
 Vercel will build the container using the included `Dockerfile` and run the container.
 
 ## Serverless fallback
+
 A minimal serverless endpoint `api/health.py` is provided as a fallback when not deploying the container.
 
 ## Environment variables (recommended)
+
 At minimum configure these in Vercel (and locally):
 
 - `SECRET_KEY` (string)
@@ -64,15 +71,18 @@ At minimum configure these in Vercel (and locally):
 - `LOG_LEVEL` (optional)
 
 Notes:
+
 - Do not use SQLite for production on Vercel — use an external managed Postgres or equivalent.
 - The current `Dockerfile` uses a Conda base (larger image). For smaller builds, consider switching to `python:3.11-slim` and using `pip` only.
 
 ## Troubleshooting
+
 - Container build is large due to Conda; allow extra time on first build.
 - If ports or DB connections fail on Vercel, ensure environment variables and network access (managed DB) are configured.
 - Check app logs in Vercel dashboard for runtime errors.
 
 ## Next steps I can do for you
+
 - Convert `Dockerfile` to a smaller `python:3.11-slim` image (faster builds).
 - Run a local Docker build and capture logs to debug the previous `docker run` failure.
 
@@ -96,9 +106,9 @@ Notes:
 ## CI/CD recommendations
 
 - Add a GitHub Actions workflow to run tests and build the Docker image on PRs. Example jobs:
-	- `lint` — run `ruff`/`flake8`/`black` (optional)
-	- `test` — run `pytest -q`
-	- `build` — build Docker image and publish (optional for Vercel)
+  - `lint` — run `ruff`/`flake8`/`black` (optional)
+  - `test` — run `pytest -q`
+  - `build` — build Docker image and publish (optional for Vercel)
 - Protect `main` branch and require passing checks before merge.
 
 ## Database migrations & seed
@@ -158,7 +168,9 @@ pytest tests -q
 ## Contact / help
 
 If you want, I can:
+
 - Convert the Dockerfile to a slim image.
 - Create GitHub Actions workflows for CI.
 - Run a local Docker build and troubleshoot the failure you saw.
 
+* I’ll add the [vercel.json](<vscode-file://vscode-app/c:/Users/NISHAKART/AppData/Local/Programs/Microsoft%20VS%20Code/e4c7e7b1d6/resources/app/out/vs/code/electron-browser/workbench/workbench.html>) proxy rewrite and move static assets to Vercel (Hybrid, quick).

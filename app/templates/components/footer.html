@@ -1,0 +1,33 @@
+<!-- ============================================================
+     SENTINEL AI — FOOTER COMPONENT
+     ============================================================ -->
+<footer class="app-footer" role="contentinfo" style="
+  padding: var(--space-4) var(--space-8);
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+">
+  <div class="flex items-center gap-3">
+    <span><i class="fa-solid fa-shield-halved" style="color:var(--color-primary);margin-right:4px" aria-hidden="true"></i>
+      <strong style="color:var(--text-secondary)">Sentinel AI</strong>
+      <span data-i18n="app.version">v2.0</span>
+    </span>
+    <span class="divider-vertical" aria-hidden="true"></span>
+    <span>Enterprise AI Governance Platform</span>
+  </div>
+  <div class="flex items-center gap-4">
+    <span id="ws-footer-status" class="flex items-center gap-1">
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--color-danger);display:inline-block" aria-hidden="true"></span>
+      <span>WebSocket</span>
+    </span>
+    <span class="divider-vertical" aria-hidden="true"></span>
+    <span>&copy; 2026 Sentinel AI. All rights reserved.</span>
+  </div>
+</footer>

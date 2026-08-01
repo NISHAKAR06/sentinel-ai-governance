@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}AI Assistant{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/assistant.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-header" style="margin-bottom:var(--space-5)">
+  <div class="page-header-row">
+    <div>
+      <h1 class="page-title" data-i18n="assistant.title">AI Assistant</h1>
+      <p class="page-subtitle" data-i18n="assistant.subtitle">Interact with governed AI actions</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <button class="btn btn-secondary btn-sm" id="new-conversation-btn">
+        <i class="fa-solid fa-plus"></i>
+        <span data-i18n="assistant.new_conversation">New Conversation</span>
+      </button>
+      <button class="btn btn-ghost btn-sm" id="chat-clear-btn" aria-label="Clear conversation">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="assistant-layout">
+
+  <!-- Chat Panel -->
+  <div class="chat-panel" role="region" aria-label="AI conversation">
+
+    <div class="chat-panel-header">
+      <div class="chat-panel-title">
+        <div class="chat-sentinel-avatar">AI</div>
+        <div>
+          <div class="chat-sentinel-name" data-i18n="assistant.assistant_label">Sentinel AI</div>
+          <div class="chat-sentinel-status">
+            <span class="chat-status-dot"></span>
+            <span class="text-xs" style="color:var(--color-success)">Online &amp; Governed</span>
+          </div>
+        </div>
+      </div>
+      <span class="badge badge-success badge-dot text-xs">Policy Active</span>
+    </div>
+
+    <div class="chat-messages" id="chat-messages" role="log" aria-live="polite">
+      <div class="chat-welcome" id="chat-welcome">
+        <div class="chat-welcome-icon"><i class="fa-solid fa-robot"></i></div>
+        <h2 class="chat-welcome-title" data-i18n="assistant.empty_state">Start a conversation to get started</h2>
+        <p class="chat-welcome-desc" data-i18n="assistant.empty_hint">Ask Sentinel AI to perform governed operations on your infrastructure</p>
+        <div class="suggested-prompts-grid">
+          <button class="suggested-prompt-btn" data-prompt="List all S3 buckets with public access in production">
+            <i class="suggested-prompt-icon fa-solid fa-magnifying-glass"></i>List all S3 buckets with public access
+          </button>
+          <button class="suggested-prompt-btn" data-prompt="Scale down the staging Kubernetes cluster by 50%">
+            <i class="suggested-prompt-icon fa-solid fa-sliders"></i>Scale down staging cluster by 50%
+          </button>
+          <button class="suggested-prompt-btn" data-prompt="Rotate API keys for inactive service accounts older than 90 days">
+            <i class="suggested-prompt-icon fa-solid fa-rotate"></i>Rotate stale API keys
+          </button>
+          <button class="suggested-prompt-btn" data-prompt="Generate a GDPR compliance report for the last 30 days">
+            <i class="suggested-prompt-icon fa-solid fa-file-shield"></i>Generate GDPR compliance report
+          </button>
+          <button class="suggested-prompt-btn" data-prompt="Archive all log files older than 180 days">
+            <i class="suggested-prompt-icon fa-solid fa-box-archive"></i>Archive old log files
+          </button>
+          <button class="suggested-prompt-btn" data-prompt="Block SSH access from public IPs on firewall">
+            <i class="suggested-prompt-icon fa-solid fa-shield-halved"></i>Block public SSH access
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <div class="chat-input-box">
+        <textarea id="chat-textarea" class="chat-textarea" rows="1"
+                  data-i18n-placeholder="assistant.placeholder"
+                  placeholder="Describe an action you want the AI to perform…"
+                  aria-label="Message input" maxlength="2000"></textarea>
+        <button id="chat-send-btn" class="chat-send-btn" aria-label="Send message" disabled>
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+      <div class="chat-input-hint">
+        <span>Press <kbd style="font-family:var(--font-mono);background:var(--bg-surface-2);border:1px solid var(--border-color);padding:1px 5px;border-radius:4px;font-size:10px">Enter</kbd> to send &nbsp;·&nbsp; <kbd style="font-family:var(--font-mono);background:var(--bg-surface-2);border:1px solid var(--border-color);padding:1px 5px;border-radius:4px;font-size:10px">Shift+Enter</kbd> for new line</span>
+        <span id="char-count" class="text-xs text-tertiary" style="margin-left:auto">0</span>
+        <span class="text-xs text-tertiary">/ 2000</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Right Panel -->
+  <div class="assistant-side-panel">
+
+    <div id="action-preview-card" class="action-preview-card">
+      <div class="action-preview-header">
+        <div class="action-preview-title">
+          <i class="fa-solid fa-eye" style="color:var(--color-primary)"></i>
+          <span data-i18n="assistant.action_preview">Action Preview</span>
+        </div>
+      </div>
+      <div id="action-preview-empty" class="action-preview-empty">
+        <div class="action-preview-empty-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+        <p class="text-sm text-secondary text-center" data-i18n="assistant.empty_hint">Send a message to see the generated action</p>
+      </div>
+      <div id="action-preview-body" class="action-preview-body" style="display:none"></div>
+      <div id="action-preview-footer" class="action-preview-footer" style="display:none"></div>
+    </div>
+
+    <div class="conversation-history">
+      <div class="action-preview-header">
+        <div class="action-preview-title">
+          <i class="fa-solid fa-clock-rotate-left" style="color:var(--text-tertiary)"></i>
+          <span data-i18n="assistant.conversation_history">Conversation History</span>
+        </div>
+      </div>
+      <div id="conversation-history-list">
+        <div class="empty-state" style="padding:var(--space-8) var(--space-4)">
+          <span class="text-xs text-tertiary">No conversations yet</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block page_js %}
+<script src="{{ url_for('static', path='js/assistant.js') }}"></script>
+{% endblock %}
+
+{% block page_init %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const ta  = document.getElementById('chat-textarea');
+    const btn = document.getElementById('chat-send-btn');
+    ta?.addEventListener('input', () => { btn.disabled = !ta.value.trim(); });
+  });
+</script>
+{% endblock %}

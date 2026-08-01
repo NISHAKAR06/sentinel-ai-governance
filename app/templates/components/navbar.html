@@ -1,0 +1,136 @@
+<!-- ============================================================
+     SENTINEL AI — NAVBAR COMPONENT
+     ============================================================ -->
+<header class="app-navbar" role="banner">
+
+  <!-- Left: hamburger (mobile) + page title -->
+  <div class="navbar-left">
+    <!-- Mobile hamburger -->
+    <button class="btn-icon btn-ghost hidden" id="mobile-menu-btn"
+            data-action="sidebar-open" aria-label="Open navigation"
+            style="display:none;padding:0;border:none">
+      <i class="fa-solid fa-bars" style="font-size:18px;color:var(--text-secondary)"></i>
+    </button>
+
+    <!-- Global search -->
+    <div class="navbar-search" role="search">
+      <i class="navbar-search-icon fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+      <input id="navbar-search"
+             class="navbar-search-input"
+             type="search"
+             data-i18n-placeholder="nav.search_placeholder"
+             placeholder="Search actions, logs, resources..."
+             aria-label="Global search"
+             autocomplete="off"
+             spellcheck="false">
+    </div>
+  </div>
+
+  <!-- Right: controls -->
+  <div class="navbar-right">
+
+    <!-- Language selector -->
+    <select class="lang-select"
+            data-action="lang-change"
+            aria-label="Select language"
+            title="Language">
+      <option value="en">EN</option>
+      <option value="ta">தமிழ்</option>
+      <option value="hi">हिन्दी</option>
+    </select>
+
+    <!-- Theme toggle -->
+    <button class="theme-toggle" data-action="theme-toggle"
+            aria-label="Toggle theme">
+      <i class="fa-solid fa-moon theme-icon" aria-hidden="true"></i>
+      <span class="theme-label" data-i18n="theme.dark">Dark Mode</span>
+    </button>
+
+    <div class="divider-vertical" aria-hidden="true"></div>
+
+    <!-- Notification bell -->
+    <div class="relative" role="region" aria-label="Notifications">
+      <button id="notification-bell"
+              class="navbar-icon-btn"
+              aria-label="Notifications"
+              aria-expanded="false"
+              aria-haspopup="true">
+        <i class="fa-solid fa-bell" aria-hidden="true"></i>
+        <span class="badge" aria-hidden="true"></span>
+      </button>
+
+      <!-- Notification panel -->
+      <div id="notification-panel" class="notification-panel" role="dialog"
+           aria-label="Notifications" aria-modal="true">
+        <div class="notification-panel-header">
+          <span class="notification-panel-title" data-i18n="nav.notifications">Notifications</span>
+          <button class="btn btn-ghost btn-sm" data-action="mark-all-read"
+                  data-i18n="nav.mark_all_read">Mark all read</button>
+        </div>
+        <div class="notification-list" role="list">
+          <!-- Populated by JS -->
+          <div class="empty-state" style="padding:2rem 1rem">
+            <div class="empty-state-icon" style="width:36px;height:36px;font-size:16px">
+              <i class="fa-solid fa-bell-slash"></i>
+            </div>
+            <span class="text-sm text-tertiary" data-i18n="nav.no_notifications">No new notifications</span>
+          </div>
+        </div>
+        <div class="notification-panel-footer">
+          <a href="/audit" class="text-sm text-link" data-i18n="common.see_more">See all activity</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider-vertical" aria-hidden="true"></div>
+
+    <!-- User profile dropdown -->
+    <div class="dropdown" role="region" aria-label="User menu">
+      <div class="navbar-user" data-dropdown-toggle aria-haspopup="true" aria-expanded="false"
+           role="button" tabindex="0" aria-label="User menu">
+        <div class="user-avatar" aria-hidden="true" id="nav-user-avatar">SA</div>
+        <div class="hidden" style="display:flex;flex-direction:column" id="nav-user-info">
+          <span class="user-name" id="nav-user-name">Admin User</span>
+          <span class="user-role" id="nav-user-role">System Administrator</span>
+        </div>
+        <i class="fa-solid fa-chevron-down" style="font-size:10px;color:var(--text-tertiary);margin-left:4px" aria-hidden="true"></i>
+      </div>
+
+      <div class="dropdown-menu" role="menu">
+        <div class="dropdown-header" data-i18n="nav.profile">Account</div>
+        <a href="/profile" class="dropdown-item" role="menuitem">
+          <i class="fa-solid fa-circle-user" aria-hidden="true"></i>
+          <span data-i18n="nav.profile">Profile</span>
+        </a>
+        <a href="/settings" class="dropdown-item" role="menuitem">
+          <i class="fa-solid fa-gear" aria-hidden="true"></i>
+          <span data-i18n="nav.settings">Settings</span>
+        </a>
+        <div class="dropdown-divider" role="separator"></div>
+        <a href="/logout" class="dropdown-item danger" role="menuitem">
+          <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+          <span data-i18n="nav.logout">Logout</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<script>
+  /* Populate nav user info from profile API on load */
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      const profile = await SentinelAPI.auth.profile();
+      const name  = profile.name  ?? 'Admin User';
+      const role  = profile.role  ?? 'Administrator';
+      const el    = document.getElementById('nav-user-name');
+      const relEl = document.getElementById('nav-user-role');
+      const avEl  = document.getElementById('nav-user-avatar');
+      if (el)    el.textContent  = name;
+      if (relEl) relEl.textContent = role;
+      if (avEl)  avEl.textContent  = name.trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
+      document.getElementById('nav-user-info')?.removeAttribute('style');
+    } catch {}
+  });
+</script>

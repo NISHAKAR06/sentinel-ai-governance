@@ -1,0 +1,287 @@
+/* ============================================================
+   SENTINEL AI — GOVERNANCE PAGE STYLES
+   governance.css
+   ============================================================ */
+
+/* ── Layout ──────────────────────────────────────────────── */
+.governance-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: var(--space-5);
+}
+.governance-main  { display: flex; flex-direction: column; gap: var(--space-5); }
+.governance-aside { display: flex; flex-direction: column; gap: var(--space-5); }
+
+/* ── Workflow Stepper Card ───────────────────────────────── */
+.governance-stepper-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Risk Score Gauge ────────────────────────────────────── */
+.risk-score-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+.gauge-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: var(--space-4) 0;
+  position: relative;
+}
+.gauge-center-text {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -40%);
+  text-align: center;
+}
+.gauge-score-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+.gauge-score-label {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  margin-top: 3px;
+}
+
+/* Gauge arc colors by level */
+.gauge-arc-low      { stroke: var(--color-success); }
+.gauge-arc-medium   { stroke: var(--color-warning); }
+.gauge-arc-high     { stroke: var(--color-danger); }
+.gauge-arc-critical { stroke: #7C3AED; }
+
+/* ── Risk Breakdown ──────────────────────────────────────── */
+.risk-breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.risk-factor-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.risk-factor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.risk-factor-name {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex; align-items: center; gap: var(--space-2);
+}
+.risk-factor-score {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+/* ── Decision Card ───────────────────────────────────────── */
+.decision-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+.decision-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+.decision-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border-radius: var(--border-radius-lg);
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background: var(--bg-surface-2);
+}
+.decision-option:hover { border-color: var(--border-color-strong); background: var(--bg-surface); }
+.decision-option.selected-auto    { border-color: var(--color-success); background: var(--color-success-light); }
+.decision-option.selected-confirm { border-color: var(--color-warning); background: var(--color-warning-light); }
+.decision-option.selected-review  { border-color: var(--color-danger);  background: var(--color-danger-light); }
+
+[data-theme="dark"] .decision-option.selected-auto    { background: rgba(22,163,74,0.12); }
+[data-theme="dark"] .decision-option.selected-confirm { background: rgba(245,158,11,0.12); }
+[data-theme="dark"] .decision-option.selected-review  { background: rgba(220,38,38,0.12); }
+
+.decision-option-icon {
+  width: 40px; height: 40px;
+  border-radius: var(--border-radius);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.decision-option-icon.auto    { background: var(--color-success-light); color: var(--color-success); }
+.decision-option-icon.confirm { background: var(--color-warning-light); color: var(--color-warning); }
+.decision-option-icon.review  { background: var(--color-danger-light);  color: var(--color-danger); }
+
+.decision-option-content { flex: 1; }
+.decision-option-label {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.decision-option-desc {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+.decision-option-check {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition-fast);
+}
+.decision-option.selected-auto    .decision-option-check { border-color: var(--color-success); background: var(--color-success); color: #fff; }
+.decision-option.selected-confirm .decision-option-check { border-color: var(--color-warning); background: var(--color-warning); color: #fff; }
+.decision-option.selected-review  .decision-option-check { border-color: var(--color-danger);  background: var(--color-danger);  color: #fff; }
+
+/* ── Policy Rules Panel ──────────────────────────────────── */
+.policy-rules-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.policy-rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--bg-surface-2);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  transition: border-color var(--transition-fast);
+}
+.policy-rule-item:hover { border-color: var(--border-color-strong); }
+.policy-rule-icon {
+  width: 24px; height: 24px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  margin-top: 1px;
+}
+.policy-rule-name {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.policy-rule-desc {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+.policy-rule-status {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ── Metadata Grid ───────────────────────────────────────── */
+.metadata-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+.metadata-item { display: flex; flex-direction: column; gap: 3px; }
+.metadata-label {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.metadata-value {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex; align-items: center; gap: var(--space-2);
+}
+
+/* ── Confidence Meter ────────────────────────────────────── */
+.confidence-ring-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+  padding: var(--space-4) 0;
+}
+.confidence-ring {
+  position: relative;
+  width: 80px; height: 80px;
+}
+.confidence-ring svg { transform: rotate(-90deg); }
+.confidence-ring-bg    { fill: none; stroke: var(--bg-surface-2); stroke-width: 8; }
+.confidence-ring-fill  { fill: none; stroke: var(--color-primary); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+.confidence-ring-text {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--font-size-sm); font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+}
+.confidence-detail { display: flex; flex-direction: column; gap: var(--space-1); }
+.confidence-detail-item {
+  display: flex; align-items: center; gap: var(--space-2);
+  font-size: var(--font-size-xs); color: var(--text-secondary);
+}
+.confidence-detail-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── Regulation Tag ──────────────────────────────────────── */
+.regulation-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+.regulation-tag {
+  padding: 3px 10px;
+  background: var(--color-info-light);
+  color: var(--color-info);
+  border-radius: var(--border-radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  border: 1px solid var(--color-info-muted);
+}
+
+/* ── Reversibility Indicator ─────────────────────────────── */
+.reversibility-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px 10px;
+  border-radius: var(--border-radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+.reversibility-badge.reversible   { background: var(--color-success-light); color: var(--color-success); }
+.reversibility-badge.irreversible { background: var(--color-danger-light);  color: var(--color-danger); }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .governance-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .metadata-grid { grid-template-columns: 1fr; }
+  .decision-option { flex-wrap: wrap; }
+}

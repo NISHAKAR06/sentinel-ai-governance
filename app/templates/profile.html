@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-header-row">
+    <div>
+      <h1 class="page-title" data-i18n="profile.title">Profile</h1>
+      <p class="page-subtitle" data-i18n="profile.subtitle">Your account and preferences</p>
+    </div>
+    <button class="btn btn-primary" id="save-profile-btn">
+      <i class="fa-solid fa-floppy-disk"></i>
+      <span data-i18n="profile.save_profile">Save Profile</span>
+    </button>
+  </div>
+</div>
+
+<div class="profile-layout">
+
+  <!-- Left: Avatar + Stats -->
+  <aside>
+    <div class="profile-card card">
+      <div class="profile-avatar-large" id="profile-avatar">
+        SA
+        <button class="profile-avatar-edit" id="avatar-edit-btn" aria-label="Change avatar">
+          <i class="fa-solid fa-pen"></i>
+        </button>
+        <input type="file" id="avatar-upload" accept="image/*" class="sr-only">
+      </div>
+      <div>
+        <div class="profile-name" id="display-name">Admin User</div>
+        <div class="profile-role" id="display-role">System Administrator</div>
+        <div class="profile-dept" id="display-dept">Platform Team</div>
+      </div>
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <div class="profile-stat-value" id="stat-total-actions">—</div>
+          <div class="profile-stat-label" data-i18n="profile.total_actions">Total Actions</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-value" id="stat-reviews-done">—</div>
+          <div class="profile-stat-label" data-i18n="profile.reviews_completed">Reviews Done</div>
+        </div>
+        <div class="profile-stat" style="grid-column:span 2">
+          <div class="profile-stat-value text-sm" id="stat-last-login">—</div>
+          <div class="profile-stat-label" data-i18n="profile.last_login">Last Login</div>
+        </div>
+      </div>
+      <div class="text-xs text-tertiary flex items-center gap-1" style="margin-top:var(--space-2)">
+        <i class="fa-solid fa-calendar"></i>
+        <span data-i18n="profile.joined">Member since</span>
+        <span id="stat-joined">—</span>
+      </div>
+    </div>
+
+    <div class="card mt-4">
+      <div class="card-header">
+        <span class="card-title">
+          <i class="fa-solid fa-shield-halved" style="color:var(--color-primary)"></i>
+          <span data-i18n="profile.security">Security</span>
+        </span>
+      </div>
+      <div class="flex flex-col gap-2">
+        <button class="btn btn-secondary w-full" id="change-password-btn">
+          <i class="fa-solid fa-key"></i>
+          <span data-i18n="profile.change_password">Change Password</span>
+        </button>
+        <div class="setting-row" style="padding:var(--space-3) 0;border-bottom:none">
+          <div class="setting-row-label">
+            <div class="setting-row-title text-sm" data-i18n="profile.two_factor">Two-Factor Auth</div>
+          </div>
+          <label class="form-toggle">
+            <input type="checkbox" class="toggle-input" id="two-factor-toggle">
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Right: Form + Activity -->
+  <div style="display:flex;flex-direction:column;gap:var(--space-5)">
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">
+          <i class="fa-solid fa-circle-user" style="color:var(--color-primary)"></i>
+          Account Information
+        </span>
+      </div>
+      <form id="profile-form" novalidate>
+        <div class="grid-2" style="gap:var(--space-5);margin-bottom:var(--space-5)">
+          <div class="form-group">
+            <label class="form-label" for="profile-name" data-i18n="profile.name">Full Name <span class="required">*</span></label>
+            <input type="text" id="profile-name" class="form-input" placeholder="John Doe" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="profile-role" data-i18n="profile.role">Role</label>
+            <input type="text" id="profile-role" class="form-input" readonly
+                   style="background:var(--bg-surface-2);cursor:not-allowed">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="profile-email" data-i18n="profile.email">Email <span class="required">*</span></label>
+            <input type="email" id="profile-email" class="form-input" placeholder="admin@company.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="profile-department" data-i18n="profile.department">Department</label>
+            <input type="text" id="profile-department" class="form-input" placeholder="Platform Team">
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">
+          <i class="fa-solid fa-sliders" style="color:var(--text-tertiary)"></i>
+          <span data-i18n="profile.preferences">Preferences</span>
+        </span>
+      </div>
+      <div class="flex flex-col gap-4">
+        <div class="setting-row" style="border-bottom:1px solid var(--border-color);padding-bottom:var(--space-4)">
+          <div class="setting-row-label">
+            <div class="setting-row-title text-sm">Email Digest</div>
+            <div class="setting-row-desc text-xs">Receive daily summary of governance activity</div>
+          </div>
+          <label class="form-toggle">
+            <input type="checkbox" class="toggle-input" id="pref-email-digest" checked>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="setting-row" style="padding-bottom:0">
+          <div class="setting-row-label">
+            <div class="setting-row-title text-sm">Review Assignments Only</div>
+            <div class="setting-row-desc text-xs">Only show notifications for items assigned to you</div>
+          </div>
+          <label class="form-toggle">
+            <input type="checkbox" class="toggle-input" id="pref-assigned-only">
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">
+          <i class="fa-solid fa-clock-rotate-left" style="color:var(--text-tertiary)"></i>
+          <span data-i18n="profile.activity">Recent Activity</span>
+        </span>
+        <a href="/audit" class="btn btn-ghost btn-sm" data-i18n="dashboard.view_all">View All</a>
+      </div>
+      <div id="profile-activity-list" class="activity-feed" role="feed">
+        <div class="skeleton skeleton-text mb-3" style="height:52px;border-radius:10px"></div>
+        <div class="skeleton skeleton-text mb-3" style="height:52px;border-radius:10px;width:90%"></div>
+        <div class="skeleton skeleton-text" style="height:52px;border-radius:10px;width:80%"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block page_js %}
+<script src="{{ url_for('static', path='js/profile.js') }}"></script>
+{% endblock %}
+
+{% block page_init %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('profile-name')?.addEventListener('input', e => {
+      document.getElementById('display-name').textContent = e.target.value || 'Admin User';
+    });
+    document.getElementById('profile-department')?.addEventListener('input', e => {
+      document.getElementById('display-dept').textContent = e.target.value;
+    });
+  });
+</script>
+{% endblock %}

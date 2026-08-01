@@ -1,0 +1,192 @@
+<!-- ============================================================
+     SENTINEL AI — SIDEBAR COMPONENT
+     Usage: Include 'components/sidebar.html' in parent template
+     ============================================================ -->
+<aside
+  id="app-sidebar"
+  class="app-sidebar"
+  role="navigation"
+  aria-label="Main navigation"
+>
+  <!-- Brand -->
+  <div class="sidebar-header">
+    <div class="sidebar-logo" aria-hidden="true">
+      <i class="fa-solid fa-shield-halved"></i>
+    </div>
+    <div class="sidebar-brand">
+      <span class="sidebar-brand-name" data-i18n="app.name">Sentinel AI</span>
+      <span class="sidebar-brand-tag" data-i18n="app.tagline"
+        >AI Governance Platform</span
+      >
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar-nav" aria-label="Primary navigation">
+    <div class="nav-section-label" data-i18n="common.all">PLATFORM</div>
+
+    <a
+      href="/dashboard"
+      class="nav-item"
+      data-tooltip="Dashboard"
+      aria-label="Dashboard"
+    >
+      <span class="nav-item-icon" aria-hidden="true"
+        ><i class="fa-solid fa-gauge-high"></i
+      ></span>
+      <span class="nav-item-label" data-i18n="nav.dashboard">Dashboard</span>
+    </a>
+
+    <a
+      href="/assistant"
+      class="nav-item"
+      data-tooltip="AI Assistant"
+      aria-label="AI Assistant"
+    >
+      <span class="nav-item-icon" aria-hidden="true"
+        ><i class="fa-solid fa-robot"></i
+      ></span>
+      <span class="nav-item-label" data-i18n="nav.assistant">AI Assistant</span>
+    </a>
+
+    <a
+      href="/governance"
+      class="nav-item"
+      data-tooltip="Governance"
+      aria-label="Governance"
+    >
+      <span class="nav-item-icon" aria-hidden="true"
+        ><i class="fa-solid fa-scale-balanced"></i
+      ></span>
+      <span class="nav-item-label" data-i18n="nav.governance">Governance</span>
+    </a>
+
+    <div class="nav-section-label" data-i18n="common.all">OPERATIONS</div>
+
+    <a
+      href="/review"
+      class="nav-item"
+      data-tooltip="Review Queue"
+      aria-label="Review Queue"
+    >
+      <span class="nav-item-icon" aria-hidden="true"
+        ><i class="fa-solid fa-inbox"></i
+      ></span>
+      <span class="nav-item-label" data-i18n="nav.review_queue"
+        >Review Queue</span
+      >
+      <span
+        class="nav-item-badge"
+        id="review-badge"
+        aria-label="pending reviews"
+        >0</span
+      >
+    </a>
+
+    <a
+      href="/audit"
+      class="nav-item"
+      data-tooltip="Audit Logs"
+      aria-label="Audit Logs"
+    >
+      <span class="nav-item-icon" aria-hidden="true"
+        ><i class="fa-solid fa-clock-rotate-left"></i
+      ></span>
+      <span class="nav-item-label" data-i18n="nav.audit_logs">Audit Logs</span>
+    </a>
+
+    <a
+      href="/analytics"
+      class="nav-item"
+      data-tooltip="Analytics"
+      aria-label="Analytics"
+    >
+      <span class="nav-item-icon" aria-hidden="true"
+        ><i class="fa-solid fa-chart-line"></i
+      ></span>
+      <span class="nav-item-label" data-i18n="nav.analytics">Analytics</span>
+    </a>
+
+    <div class="nav-section-label">ACCOUNT</div>
+
+    <a
+      href="/settings"
+      class="nav-item"
+      data-tooltip="Settings"
+      aria-label="Settings"
+    >
+      <span class="nav-item-icon" aria-hidden="true"
+        ><i class="fa-solid fa-gear"></i
+      ></span>
+      <span class="nav-item-label" data-i18n="nav.settings">Settings</span>
+    </a>
+
+    <a
+      href="/profile"
+      class="nav-item"
+      data-tooltip="Profile"
+      aria-label="Profile"
+    >
+      <span class="nav-item-icon" aria-hidden="true"
+        ><i class="fa-solid fa-circle-user"></i
+      ></span>
+      <span class="nav-item-label" data-i18n="nav.profile">Profile</span>
+    </a>
+  </nav>
+
+  <!-- Footer: WS status + collapse -->
+  <div class="sidebar-footer">
+    <!-- WebSocket status pill -->
+    <div
+      id="ws-status"
+      class="flex items-center gap-2 px-3 py-2 mb-1"
+      data-status="offline"
+      style="opacity: 0.6"
+    >
+      <span
+        class="ws-dot"
+        style="
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: var(--color-danger);
+          flex-shrink: 0;
+        "
+      ></span>
+      <span class="ws-label text-xs font-mono text-tertiary nav-item-label"
+        >Connecting…</span
+      >
+    </div>
+
+    <!-- Logout -->
+    <a
+      href="/logout"
+      class="nav-item"
+      data-tooltip="Logout"
+      aria-label="Logout"
+    >
+      <span class="nav-item-icon" aria-hidden="true"
+        ><i class="fa-solid fa-right-from-bracket"></i
+      ></span>
+      <span class="nav-item-label" data-i18n="nav.logout">Logout</span>
+    </a>
+
+    <!-- Collapse toggle -->
+    <button
+      class="sidebar-collapse-btn"
+      data-action="sidebar-toggle"
+      aria-label="Collapse sidebar"
+      aria-expanded="true"
+    >
+      <span class="nav-item-icon" aria-hidden="true">
+        <i class="fa-solid fa-chevron-left"></i>
+      </span>
+      <span class="nav-item-label text-xs" data-i18n="nav.collapse_sidebar"
+        >Collapse</span
+      >
+    </button>
+  </div>
+</aside>
+
+<!-- Mobile overlay -->
+<div id="sidebar-overlay" class="sidebar-overlay" aria-hidden="true"></div>

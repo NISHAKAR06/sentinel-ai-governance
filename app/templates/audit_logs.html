@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Audit Logs{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-header-row">
+    <div>
+      <h1 class="page-title" data-i18n="audit.title">Audit Logs</h1>
+      <p class="page-subtitle" data-i18n="audit.subtitle">Complete audit trail of all AI actions</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <button class="btn btn-secondary btn-sm" id="export-csv-btn">
+        <i class="fa-solid fa-file-csv"></i>
+        <span data-i18n="audit.export_csv">Export CSV</span>
+      </button>
+      <button class="btn btn-secondary btn-sm" id="export-json-btn">
+        <i class="fa-solid fa-file-code"></i>
+        <span data-i18n="audit.export_json">Export JSON</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Filter Toolbar -->
+<div class="card mb-5" style="padding:var(--space-4) var(--space-5)">
+  <div class="flex items-center gap-4 flex-wrap">
+    <div class="search-bar flex-1" style="min-width:220px;max-width:360px">
+      <i class="search-bar-icon fa-solid fa-magnifying-glass"></i>
+      <input id="audit-search" class="search-bar-input" type="search"
+             data-i18n-placeholder="audit.search_placeholder"
+             placeholder="Search logs…" aria-label="Search audit logs">
+    </div>
+    <select id="filter-risk" class="form-select" style="min-width:140px" aria-label="Filter by risk">
+      <option value="all">All Risks</option>
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+      <option value="critical">Critical</option>
+    </select>
+    <select id="filter-status" class="form-select" style="min-width:140px" aria-label="Filter by status">
+      <option value="all">All Statuses</option>
+      <option value="approved">Approved</option>
+      <option value="rejected">Rejected</option>
+      <option value="completed">Completed</option>
+      <option value="failed">Failed</option>
+    </select>
+    <div class="flex items-center gap-2">
+      <input type="date" id="filter-date-from" class="form-input" style="width:150px" aria-label="From date">
+      <span class="text-xs text-tertiary">to</span>
+      <input type="date" id="filter-date-to" class="form-input" style="width:150px" aria-label="To date">
+    </div>
+    <div class="audit-view-toggle ml-auto" role="group" aria-label="View mode">
+      <button class="audit-view-btn active" data-view="timeline" aria-label="Timeline view">
+        <i class="fa-solid fa-timeline"></i>
+      </button>
+      <button class="audit-view-btn" data-view="table" aria-label="Table view">
+        <i class="fa-solid fa-table"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="flex items-center justify-between mb-4">
+  <span class="text-sm text-tertiary" id="audit-count">Loading…</span>
+</div>
+
+<!-- Timeline View -->
+<div id="audit-timeline-container" class="card" style="padding:var(--space-5)" role="feed">
+  <div class="audit-timeline-entry">
+    <div class="audit-timeline-marker">
+      <div class="skeleton" style="width:10px;height:10px;border-radius:50%"></div>
+    </div>
+    <div class="audit-entry-content flex-1">
+      <div class="skeleton skeleton-title" style="width:60%"></div>
+      <div class="skeleton skeleton-text" style="width:40%"></div>
+    </div>
+  </div>
+  <div class="audit-timeline-entry">
+    <div class="audit-timeline-marker">
+      <div class="skeleton" style="width:10px;height:10px;border-radius:50%"></div>
+    </div>
+    <div class="audit-entry-content flex-1">
+      <div class="skeleton skeleton-title" style="width:50%"></div>
+      <div class="skeleton skeleton-text" style="width:35%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Table View -->
+<div id="audit-table-wrapper" class="hidden">
+  <div class="table-wrapper">
+    <table class="data-table" aria-label="Audit logs">
+      <thead>
+        <tr>
+          <th data-i18n="audit.timestamp">Timestamp</th>
+          <th data-i18n="audit.action">Action</th>
+          <th data-i18n="audit.resource">Resource</th>
+          <th data-i18n="audit.risk_level">Risk Level</th>
+          <th data-i18n="audit.reviewer">Reviewer</th>
+          <th data-i18n="audit.outcome">Outcome</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="audit-table-tbody">
+        <tr><td colspan="7" class="text-center" style="padding:48px 0;color:var(--text-tertiary)" data-i18n="audit.no_logs">No audit logs found</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="audit-pagination" class="pagination mt-4" role="navigation" aria-label="Pagination"></div>
+{% endblock %}
+
+{% block page_js %}
+<script src="{{ url_for('static', path='js/audit.js') }}"></script>
+{% endblock %}

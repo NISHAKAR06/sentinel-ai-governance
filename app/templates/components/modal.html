@@ -1,0 +1,106 @@
+<!-- ============================================================
+     SENTINEL AI — REUSABLE MODALS
+     ============================================================ -->
+
+<!-- ── Reject Review Modal ──────────────────────────────────── -->
+<div id="reject-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="reject-modal-title">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <span class="modal-title" id="reject-modal-title" data-i18n="review.reject">Reject Action</span>
+      <button class="modal-close" data-modal-close="reject-modal" aria-label="Close">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <form id="reject-form">
+      <input type="hidden" id="reject-target-id" value="">
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="reject-reason" data-i18n="review.reason_label">
+            Reason <span class="required" aria-hidden="true">*</span>
+          </label>
+          <textarea id="reject-reason" class="form-textarea" rows="3"
+                    data-i18n-placeholder="review.reason_placeholder"
+                    placeholder="Enter reason for rejection..."
+                    required
+                    aria-required="true"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-modal-close="reject-modal"
+                data-i18n="common.cancel">Cancel</button>
+        <button type="submit" class="btn btn-danger">
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          <span data-i18n="review.reject">Reject</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ── Modify Action Modal ──────────────────────────────────── -->
+<div id="modify-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modify-modal-title">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modify-modal-title" data-i18n="review.modify">Modify Action</span>
+      <button class="modal-close" data-modal-close="modify-modal" aria-label="Close">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="modify-target-id">
+      <div class="form-group mb-4">
+        <label class="form-label" for="modify-action-json">Action JSON</label>
+        <textarea id="modify-action-json" class="form-textarea font-mono text-xs" rows="8"
+                  placeholder='{"operation": "...", "params": {}}' spellcheck="false"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="modify-reason">Modification Reason</label>
+        <textarea id="modify-reason" class="form-textarea" rows="2"
+                  placeholder="Describe the modification..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-modal-close="modify-modal"
+              data-i18n="common.cancel">Cancel</button>
+      <button type="button" class="btn btn-primary" id="modify-submit-btn">
+        <i class="fa-solid fa-pen" aria-hidden="true"></i>
+        <span data-i18n="review.modify">Save Changes</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Change Password Modal ────────────────────────────────── -->
+<div id="change-password-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="pwd-modal-title">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <span class="modal-title" id="pwd-modal-title" data-i18n="profile.change_password">Change Password</span>
+      <button class="modal-close" data-modal-close="change-password-modal" aria-label="Close">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <form id="change-password-form">
+      <div class="modal-body" style="display:flex;flex-direction:column;gap:var(--space-4)">
+        <div class="form-group">
+          <label class="form-label" for="current-password">Current Password <span class="required">*</span></label>
+          <input type="password" id="current-password" class="form-input" required autocomplete="current-password">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="new-password">New Password <span class="required">*</span></label>
+          <input type="password" id="new-password" class="form-input" required minlength="8" autocomplete="new-password">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="confirm-password">Confirm New Password <span class="required">*</span></label>
+          <input type="password" id="confirm-password" class="form-input" required autocomplete="new-password">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-modal-close="change-password-modal"
+                data-i18n="common.cancel">Cancel</button>
+        <button type="submit" class="btn btn-primary">
+          <i class="fa-solid fa-key" aria-hidden="true"></i> Update Password
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

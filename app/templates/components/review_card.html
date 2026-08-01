@@ -1,0 +1,39 @@
+<!-- ============================================================
+     SENTINEL AI — REVIEW SUMMARY CARD COMPONENT
+     ============================================================ -->
+<div class="card" aria-label="Review summary">
+  <div class="card-header">
+    <span class="card-title">
+      <i class="fa-solid fa-inbox" aria-hidden="true" style="color:var(--color-primary)"></i>
+      <span data-i18n="review.title">Review Queue</span>
+    </span>
+    <a href="/review" class="btn btn-secondary btn-sm" data-i18n="dashboard.view_all">View All</a>
+  </div>
+
+  <div class="review-stats-row" style="grid-template-columns:repeat(2,1fr);gap:var(--space-3);margin-bottom:var(--space-4)">
+    <div class="review-stat-item">
+      <div class="review-stat-value text-warning" id="stat-pending">—</div>
+      <div class="review-stat-label" data-i18n="review.status_pending">Pending</div>
+    </div>
+    <div class="review-stat-item">
+      <div class="review-stat-value text-danger" id="stat-critical">—</div>
+      <div class="review-stat-label" data-i18n="review.priority_critical">Critical</div>
+    </div>
+    <div class="review-stat-item">
+      <div class="review-stat-value text-success" id="stat-approved">—</div>
+      <div class="review-stat-label" data-i18n="review.status_approved">Approved</div>
+    </div>
+    <div class="review-stat-item">
+      <div class="review-stat-value text-danger" id="stat-rejected">—</div>
+      <div class="review-stat-label" data-i18n="review.status_rejected">Rejected</div>
+    </div>
+  </div>
+
+  <!-- Mini list of pending items -->
+  <div id="review-mini-list" class="activity-feed">
+    <!-- Populated by dashboard.js -->
+    <div class="skeleton skeleton-text"></div>
+    <div class="skeleton skeleton-text" style="width:85%"></div>
+    <div class="skeleton skeleton-text" style="width:70%"></div>
+  </div>
+</div>

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Review Queue{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/review.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-header-row">
+    <div>
+      <h1 class="page-title" data-i18n="review.title">Review Queue</h1>
+      <p class="page-subtitle" data-i18n="review.subtitle">Pending human review requests</p>
+    </div>
+    <button class="btn btn-secondary btn-sm" id="export-csv-btn">
+      <i class="fa-solid fa-download"></i>
+      <span data-i18n="common.export">Export</span>
+    </button>
+  </div>
+</div>
+
+<!-- Stats Row -->
+<div class="review-stats-row mb-5">
+  <div class="review-stat-item">
+    <div class="review-stat-value text-warning" id="stat-pending">—</div>
+    <div class="review-stat-label" data-i18n="review.status_pending">Pending</div>
+  </div>
+  <div class="review-stat-item">
+    <div class="review-stat-value" style="color:#7C3AED" id="stat-critical">—</div>
+    <div class="review-stat-label" data-i18n="review.priority_critical">Critical</div>
+  </div>
+  <div class="review-stat-item">
+    <div class="review-stat-value text-success" id="stat-approved">—</div>
+    <div class="review-stat-label" data-i18n="review.status_approved">Approved</div>
+  </div>
+  <div class="review-stat-item">
+    <div class="review-stat-value text-danger" id="stat-rejected">—</div>
+    <div class="review-stat-label" data-i18n="review.status_rejected">Rejected</div>
+  </div>
+</div>
+
+<!-- Table Card -->
+<div class="review-table-card">
+
+  <div class="review-table-header">
+    <div class="flex items-center gap-2 flex-wrap">
+      <button class="filter-chip active" data-filter-status="all" data-i18n="review.filter_all">All</button>
+      <button class="filter-chip" data-filter-status="pending" data-i18n="review.filter_pending">Pending</button>
+      <button class="filter-chip" data-filter-status="approved" data-i18n="review.filter_approved">Approved</button>
+      <button class="filter-chip" data-filter-status="rejected" data-i18n="review.filter_rejected">Rejected</button>
+    </div>
+    <div class="flex items-center gap-3 ml-auto">
+      <div class="search-bar" style="width:240px">
+        <i class="search-bar-icon fa-solid fa-magnifying-glass"></i>
+        <input id="review-search" class="search-bar-input" type="search"
+               data-i18n-placeholder="review.search_placeholder"
+               placeholder="Search reviews…" aria-label="Search review queue">
+      </div>
+      <button class="btn btn-secondary btn-sm" id="bulk-approve-btn">
+        <i class="fa-solid fa-check-double"></i>
+      </button>
+    </div>
+  </div>
+
+  <div id="bulk-actions-bar" class="bulk-actions-bar hidden" aria-live="polite">
+    <i class="fa-solid fa-check-square text-primary"></i>
+    <span class="bulk-selected-count">0</span>
+    <span data-i18n="review.total_items">items selected</span>
+    <button class="btn btn-success btn-sm" id="bulk-approve-selected">
+      <i class="fa-solid fa-check"></i> <span data-i18n="review.approve">Approve</span>
+    </button>
+    <button class="btn btn-outline-danger btn-sm" id="bulk-reject-selected">
+      <i class="fa-solid fa-xmark"></i> <span data-i18n="review.reject">Reject</span>
+    </button>
+  </div>
+
+  <div class="table-wrapper" style="border:none;border-radius:0;border-top:1px solid var(--border-color)">
+    <table class="data-table" aria-label="Review queue">
+      <thead>
+        <tr>
+          <th style="width:40px"><input type="checkbox" id="select-all" class="row-checkbox" aria-label="Select all"></th>
+          <th style="width:36px"></th>
+          <th class="sortable" data-col="id" data-i18n="review.request_id">Request ID</th>
+          <th class="sortable" data-col="action" data-i18n="review.action">Action</th>
+          <th class="sortable" data-col="risk_level" data-i18n="review.risk">Risk</th>
+          <th class="sortable" data-col="department" data-i18n="review.department">Department</th>
+          <th class="sortable" data-col="priority" data-i18n="review.priority">Priority</th>
+          <th class="sortable" data-col="status" data-i18n="review.status">Status</th>
+          <th class="sortable" data-col="created_at" data-i18n="review.created">Created</th>
+          <th data-i18n="common.edit">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="review-tbody">
+        <tr><td colspan="10"><div class="skeleton skeleton-text" style="margin:14px 16px"></div></td></tr>
+        <tr><td colspan="10"><div class="skeleton skeleton-text" style="margin:14px 16px;width:90%"></div></td></tr>
+        <tr><td colspan="10"><div class="skeleton skeleton-text" style="margin:14px 16px;width:80%"></div></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="review-table-footer">
+    <span class="table-info" id="table-info">Loading…</span>
+    <div id="review-pagination" class="pagination" role="navigation" aria-label="Table pagination"></div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block page_js %}
+<script src="{{ url_for('static', path='js/review.js') }}"></script>
+{% endblock %}

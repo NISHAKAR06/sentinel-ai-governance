@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="page-header">
+  <div class="page-header-row">
+    <div>
+      <h1 class="page-title" data-i18n="dashboard.title">Dashboard</h1>
+      <p class="page-subtitle" data-i18n="dashboard.subtitle">Overview of AI governance activity</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-xs text-tertiary" id="last-updated"></span>
+      <button class="btn btn-secondary btn-sm" id="dashboard-refresh" aria-label="Refresh">
+        <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
+        <span data-i18n="dashboard.refresh">Refresh</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Stat Cards ───────────────────────────────────────── -->
+<div class="stats-grid" role="region" aria-label="Key metrics">
+
+  <div class="stat-card" id="stat-total-requests">
+    <div class="stat-card-header">
+      <div>
+        <div class="stat-card-label" data-i18n="dashboard.total_requests">Total Requests</div>
+        <div class="stat-card-value">—</div>
+      </div>
+      <div class="stat-card-icon blue"><i class="fa-solid fa-bolt"></i></div>
+    </div>
+    <div class="stat-card-trend trend-up">
+      <i class="fa-solid fa-arrow-up"></i> — <span data-i18n="dashboard.vs_yesterday">vs yesterday</span>
+    </div>
+  </div>
+
+  <div class="stat-card" id="stat-autonomous">
+    <div class="stat-card-header">
+      <div>
+        <div class="stat-card-label" data-i18n="dashboard.autonomous_actions">Autonomous Actions</div>
+        <div class="stat-card-value">—</div>
+      </div>
+      <div class="stat-card-icon green"><i class="fa-solid fa-robot"></i></div>
+    </div>
+    <div class="stat-card-trend trend-up"><i class="fa-solid fa-arrow-up"></i> —</div>
+  </div>
+
+  <div class="stat-card" id="stat-confirmations">
+    <div class="stat-card-header">
+      <div>
+        <div class="stat-card-label" data-i18n="dashboard.pending_confirmations">Pending Confirmations</div>
+        <div class="stat-card-value">—</div>
+      </div>
+      <div class="stat-card-icon yellow"><i class="fa-solid fa-hourglass-half"></i></div>
+    </div>
+    <div class="stat-card-trend trend-neutral"><i class="fa-solid fa-minus"></i> Awaiting approval</div>
+  </div>
+
+  <div class="stat-card" id="stat-reviews">
+    <div class="stat-card-header">
+      <div>
+        <div class="stat-card-label" data-i18n="dashboard.pending_reviews">Pending Reviews</div>
+        <div class="stat-card-value">—</div>
+      </div>
+      <div class="stat-card-icon red"><i class="fa-solid fa-inbox"></i></div>
+    </div>
+    <div class="stat-card-trend trend-neutral"><i class="fa-solid fa-minus"></i> Human review required</div>
+  </div>
+
+  <div class="stat-card" id="stat-avg-risk">
+    <div class="stat-card-header">
+      <div>
+        <div class="stat-card-label" data-i18n="dashboard.avg_risk">Average Risk Score</div>
+        <div class="stat-card-value">—</div>
+      </div>
+      <div class="stat-card-icon purple"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    </div>
+    <div class="stat-card-trend trend-neutral"><i class="fa-solid fa-minus"></i> 7-day average</div>
+  </div>
+
+  <div class="stat-card" id="stat-health">
+    <div class="stat-card-header">
+      <div>
+        <div class="stat-card-label" data-i18n="dashboard.system_health">System Health</div>
+        <div class="stat-card-value">—</div>
+      </div>
+      <div class="stat-card-icon cyan"><i class="fa-solid fa-server"></i></div>
+    </div>
+    <div class="stat-card-trend trend-up"><i class="fa-solid fa-check"></i> All systems operational</div>
+  </div>
+
+</div>
+
+<!-- ── Today Activity + System Health ──────────────────── -->
+<div class="dashboard-grid">
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">
+        <i class="fa-solid fa-calendar-day" style="color:var(--color-primary)"></i>
+        <span data-i18n="dashboard.todays_activity">Today's Activity</span>
+      </span>
+      <span class="text-xs text-tertiary" id="activity-date"></span>
+    </div>
+    <div class="mini-bar-chart" id="today-activity-bars" role="img" aria-label="Hourly requests"></div>
+    <div class="chart-legend mt-3">
+      <span class="legend-item"><span class="legend-dot" style="background:var(--color-primary)"></span> Requests per hour</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">
+        <i class="fa-solid fa-heart-pulse" style="color:var(--color-success)"></i>
+        <span data-i18n="dashboard.system_health">System Health</span>
+      </span>
+      <span class="badge badge-success badge-dot" id="health-overall-badge" data-i18n="dashboard.healthy">Healthy</span>
+    </div>
+    <div class="health-indicators" id="health-indicators">
+      <div class="skeleton skeleton-text" style="height:52px;border-radius:10px"></div>
+      <div class="skeleton skeleton-text" style="height:52px;border-radius:10px"></div>
+      <div class="skeleton skeleton-text" style="height:52px;border-radius:10px"></div>
+      <div class="skeleton skeleton-text" style="height:52px;border-radius:10px"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Charts: Approval Trends + Risk Distribution ─────── -->
+<div class="dashboard-grid-wide">
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">
+        <i class="fa-solid fa-chart-bar" style="color:var(--color-primary)"></i>
+        <span data-i18n="dashboard.approval_trends">Approval Trends</span>
+      </span>
+      <a href="/analytics" class="btn btn-ghost btn-sm">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+      </a>
+    </div>
+    <div class="chart-container chart-container-md">
+      <canvas id="approval-trends-chart" role="img" aria-label="Approval trends"></canvas>
+    </div>
+    <div class="chart-legend mt-3">
+      <span class="legend-item"><span class="legend-dot" style="background:#2563EB"></span> <span data-i18n="analytics.auto_approved">Auto Approved</span></span>
+      <span class="legend-item"><span class="legend-dot" style="background:#F59E0B"></span> <span data-i18n="analytics.human_reviewed">Human Reviewed</span></span>
+      <span class="legend-item"><span class="legend-dot" style="background:#DC2626"></span> <span data-i18n="analytics.rejected">Rejected</span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">
+        <i class="fa-solid fa-chart-pie" style="color:var(--color-warning)"></i>
+        <span data-i18n="dashboard.risk_distribution">Risk Distribution</span>
+      </span>
+    </div>
+    <div class="chart-container chart-container-md" style="display:flex;align-items:center;justify-content:center">
+      <canvas id="risk-distribution-chart" role="img" aria-label="Risk distribution" style="max-width:220px;max-height:220px"></canvas>
+    </div>
+    <div class="chart-legend mt-3" style="justify-content:center">
+      <span class="legend-item"><span class="legend-dot" style="background:#16A34A"></span> Low</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#F59E0B"></span> Medium</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#DC2626"></span> High</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#7C3AED"></span> Critical</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Recent Actions + Audit Timeline ─────────────────── -->
+<div class="dashboard-grid">
+
+  <div class="card" style="overflow:hidden;padding:0">
+    <div class="card-header" style="padding:var(--space-5) var(--space-6)">
+      <span class="card-title">
+        <i class="fa-solid fa-list-check" style="color:var(--color-primary)"></i>
+        <span data-i18n="dashboard.recent_actions">Recent Actions</span>
+      </span>
+      <a href="/audit" class="btn btn-secondary btn-sm" data-i18n="dashboard.view_all">View All</a>
+    </div>
+    <div class="table-wrapper" style="border:none;border-radius:0">
+      <table class="data-table" aria-label="Recent actions">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th data-i18n="review.action">Action</th>
+            <th data-i18n="review.risk">Risk</th>
+            <th data-i18n="review.status">Status</th>
+            <th data-i18n="review.created">Time</th>
+          </tr>
+        </thead>
+        <tbody id="recent-actions-tbody">
+          <tr><td colspan="5"><div class="skeleton skeleton-text" style="margin:12px 16px"></div></td></tr>
+          <tr><td colspan="5"><div class="skeleton skeleton-text" style="margin:12px 16px;width:80%"></div></td></tr>
+          <tr><td colspan="5"><div class="skeleton skeleton-text" style="margin:12px 16px;width:90%"></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">
+        <i class="fa-solid fa-clock-rotate-left" style="color:var(--color-info)"></i>
+        <span data-i18n="dashboard.audit_timeline">Recent Audit Timeline</span>
+      </span>
+      <a href="/audit" class="btn btn-secondary btn-sm" data-i18n="dashboard.view_all">View All</a>
+    </div>
+    <div class="audit-mini-list" id="audit-mini-list" role="feed">
+      <div class="skeleton skeleton-text" style="height:52px;border-radius:8px;margin-bottom:8px"></div>
+      <div class="skeleton skeleton-text" style="height:52px;border-radius:8px;margin-bottom:8px;width:90%"></div>
+      <div class="skeleton skeleton-text" style="height:52px;border-radius:8px;width:80%"></div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block page_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', path='js/dashboard.js') }}"></script>
+{% endblock %}
+
+{% block page_init %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('activity-date').textContent =
+      new Date().toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric' });
+  });
+</script>
+{% endblock %}

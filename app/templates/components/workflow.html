@@ -1,0 +1,38 @@
+<!-- ============================================================
+     SENTINEL AI — WORKFLOW STEPPER COMPONENT
+     Usage: {% include 'components/workflow.html' %}
+     Requires: governance.js to call _setStep()
+     ============================================================ -->
+<div class="workflow-stepper" role="list" aria-label="Governance workflow stages">
+
+  <div class="workflow-step" data-stage="intake" role="listitem">
+    <div class="step-circle" aria-hidden="true">1</div>
+    <span class="step-label" data-i18n="governance.stage_intake">Intake</span>
+  </div>
+
+  <div class="workflow-step" data-stage="risk" role="listitem">
+    <div class="step-circle" aria-hidden="true">2</div>
+    <span class="step-label" data-i18n="governance.stage_risk">Risk Assessment</span>
+  </div>
+
+  <div class="workflow-step" data-stage="policy" role="listitem">
+    <div class="step-circle" aria-hidden="true">3</div>
+    <span class="step-label" data-i18n="governance.stage_policy">Policy Check</span>
+  </div>
+
+  <div class="workflow-step" data-stage="decision" role="listitem">
+    <div class="step-circle" aria-hidden="true">4</div>
+    <span class="step-label" data-i18n="governance.stage_decision">Decision</span>
+  </div>
+
+  <div class="workflow-step" data-stage="execution" role="listitem">
+    <div class="step-circle" aria-hidden="true">5</div>
+    <span class="step-label" data-i18n="governance.stage_execution">Execution</span>
+  </div>
+
+  <div class="workflow-step" data-stage="audit" role="listitem">
+    <div class="step-circle" aria-hidden="true">6</div>
+    <span class="step-label" data-i18n="governance.stage_audit">Audit</span>
+  </div>
+
+</div>

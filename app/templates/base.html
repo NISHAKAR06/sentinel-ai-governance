@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sentinel AI Governance Platform">
+  <title>{% block title %}Sentinel AI{% endblock %} — Sentinel AI</title>
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- Core CSS (always loaded) -->
+  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+
+  <!-- Per-page CSS -->
+  {% block page_css %}{% endblock %}
+
+  <!-- Runtime config injected before any JS -->
+  <script>
+    window.SENTINEL_CONFIG = {
+      apiBase: '{{ api_base | default("/api/v1") }}',
+      wsUrl: 'ws://' + location.host + '/ws',
+      wsAutoConnect: true,
+      defaultLang: '{{ default_lang | default("en") }}'
+    };
+  </script>
+</head>
+<body>
+
+{% block body %}
+<div class="app-shell">
+
+  {# ── Sidebar ─────────────────────────────────────────── #}
+  {% include 'components/sidebar.html' %}
+
+  {# ── Main Column ─────────────────────────────────────── #}
+  <div class="app-main">
+
+    {# ── Navbar ──────────────────────────────────────────── #}
+    {% include 'components/navbar.html' %}
+
+    {# ── Page Content ─────────────────────────────────────── #}
+    <main class="app-content" id="main-content" role="main">
+      {% block content %}{% endblock %}
+    </main>
+
+    {# ── Footer ──────────────────────────────────────────── #}
+    {% include 'components/footer.html' %}
+
+  </div>{# /app-main #}
+
+</div>{# /app-shell #}
+{% endblock %}
+
+{# ── Shared Overlays ──────────────────────────────────────── #}
+{% include 'components/modal.html' %}
+{% include 'components/loader.html' %}
+{% include 'components/toast.html' %}
+
+{# ── Core JS (load order: api → ws → app) ────────────────── #}
+<script src="{{ url_for('static', path='js/api.js') }}"></script>
+<script src="{{ url_for('static', path='js/websocket.js') }}"></script>
+<script src="{{ url_for('static', path='js/app.js') }}"></script>
+
+{# ── Per-page JS ──────────────────────────────────────────── #}
+{% block page_js %}{% endblock %}
+
+{# ── Inline page init ─────────────────────────────────────── #}
+{% block page_init %}{% endblock %}
+
+</body>
+</html>

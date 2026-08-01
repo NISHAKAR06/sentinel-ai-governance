@@ -1,0 +1,38 @@
+<!-- ============================================================
+     SENTINEL AI — RISK SCORE CARD COMPONENT
+     ============================================================ -->
+<div class="card risk-score-card" aria-label="Risk score">
+  <div class="card-header">
+    <span class="card-title">
+      <i class="fa-solid fa-triangle-exclamation" aria-hidden="true" style="color:var(--color-warning)"></i>
+      <span data-i18n="governance.risk_score">Risk Score</span>
+    </span>
+    <span class="badge badge-warning" id="risk-level-badge">Medium</span>
+  </div>
+
+  <!-- SVG Gauge -->
+  <div class="gauge-wrapper">
+    <svg id="risk-gauge-svg" width="140" height="80" viewBox="0 0 140 80"
+         role="img" aria-label="Risk gauge">
+      <path class="gauge-track" d=""/>
+      <path class="gauge-fill"  d=""
+            stroke-dasharray="0" stroke-dashoffset="0"/>
+    </svg>
+    <div class="gauge-center-text">
+      <div class="gauge-score-value" id="gauge-score-value" aria-live="polite">0</div>
+      <div class="gauge-score-label" data-i18n="governance.risk_score">Risk Score</div>
+    </div>
+  </div>
+
+  <!-- Risk Breakdown -->
+  <div class="mt-4">
+    <div class="text-xs font-semi text-tertiary mb-3" style="letter-spacing:.05em;text-transform:uppercase"
+         data-i18n="governance.risk_breakdown">Risk Breakdown</div>
+    <div id="risk-breakdown-list" class="risk-breakdown-list">
+      <!-- Populated by governance.js -->
+      <div class="skeleton skeleton-text"></div>
+      <div class="skeleton skeleton-text" style="width:80%"></div>
+      <div class="skeleton skeleton-text" style="width:90%"></div>
+    </div>
+  </div>
+</div>

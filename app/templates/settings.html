@@ -1,0 +1,339 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/settings.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-header-row">
+    <div>
+      <h1 class="page-title" data-i18n="settings.title">Settings</h1>
+      <p class="page-subtitle" data-i18n="settings.subtitle">Platform configuration and preferences</p>
+    </div>
+    <button class="btn btn-secondary btn-sm" id="settings-reset-btn">
+      <i class="fa-solid fa-rotate-left"></i>
+      <span data-i18n="settings.reset_defaults">Reset Defaults</span>
+    </button>
+  </div>
+</div>
+
+<form id="settings-form" novalidate>
+<div class="settings-layout">
+
+  <!-- Nav -->
+  <nav class="settings-nav" aria-label="Settings sections">
+    <a class="settings-nav-item active" data-section="theme" href="#section-theme">
+      <i class="settings-nav-icon fa-solid fa-palette"></i><span data-i18n="settings.theme_section">Theme</span>
+    </a>
+    <a class="settings-nav-item" data-section="language" href="#section-language">
+      <i class="settings-nav-icon fa-solid fa-language"></i><span data-i18n="settings.language_section">Language</span>
+    </a>
+    <a class="settings-nav-item" data-section="risk" href="#section-risk">
+      <i class="settings-nav-icon fa-solid fa-triangle-exclamation"></i><span data-i18n="settings.risk_section">Risk</span>
+    </a>
+    <a class="settings-nav-item" data-section="notifications" href="#section-notifications">
+      <i class="settings-nav-icon fa-solid fa-bell"></i><span data-i18n="settings.notifications_section">Notifications</span>
+    </a>
+    <a class="settings-nav-item" data-section="learning" href="#section-learning">
+      <i class="settings-nav-icon fa-solid fa-brain"></i><span data-i18n="settings.learning_section">Learning</span>
+    </a>
+    <a class="settings-nav-item" data-section="websocket" href="#section-websocket">
+      <i class="settings-nav-icon fa-solid fa-plug"></i><span data-i18n="settings.websocket_section">WebSocket</span>
+    </a>
+    <a class="settings-nav-item" data-section="audit" href="#section-audit">
+      <i class="settings-nav-icon fa-solid fa-clock-rotate-left"></i><span data-i18n="settings.audit_section">Audit</span>
+    </a>
+  </nav>
+
+  <!-- Content -->
+  <div class="settings-content">
+
+    <!-- Theme -->
+    <div class="settings-section" id="section-theme">
+      <div class="settings-section-header">
+        <div class="settings-section-icon" style="background:var(--color-primary-light);color:var(--color-primary)"><i class="fa-solid fa-palette"></i></div>
+        <div>
+          <div class="settings-section-title" data-i18n="settings.theme_section">Theme &amp; Appearance</div>
+          <div class="settings-section-desc">Choose how Sentinel AI looks on your device</div>
+        </div>
+      </div>
+      <div class="settings-section-body">
+        <div class="theme-options" role="radiogroup">
+          <div class="theme-option-card" data-theme="light" role="radio" tabindex="0" aria-checked="true">
+            <div class="theme-preview theme-preview-light">
+              <div class="theme-preview-sidebar" style="background:#F1F5F9"></div>
+              <div class="theme-preview-main">
+                <div class="theme-preview-bar" style="background:#CBD5E1"></div>
+                <div class="theme-preview-bar short" style="background:#E2E8F0"></div>
+              </div>
+            </div>
+            <div class="theme-option-name">Light Mode</div>
+            <div class="theme-option-check"><i class="fa-solid fa-check" style="font-size:9px"></i></div>
+          </div>
+          <div class="theme-option-card" data-theme="dark" role="radio" tabindex="0" aria-checked="false">
+            <div class="theme-preview theme-preview-dark">
+              <div class="theme-preview-sidebar" style="background:#1E293B"></div>
+              <div class="theme-preview-main">
+                <div class="theme-preview-bar" style="background:#334155"></div>
+                <div class="theme-preview-bar short" style="background:#263248"></div>
+              </div>
+            </div>
+            <div class="theme-option-name">Dark Mode</div>
+            <div class="theme-option-check"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Language -->
+    <div class="settings-section" id="section-language">
+      <div class="settings-section-header">
+        <div class="settings-section-icon" style="background:var(--color-info-light);color:var(--color-info)"><i class="fa-solid fa-language"></i></div>
+        <div>
+          <div class="settings-section-title" data-i18n="settings.language_section">Language &amp; Localization</div>
+          <div class="settings-section-desc">Change the display language for the entire platform</div>
+        </div>
+      </div>
+      <div class="settings-section-body">
+        <div class="setting-row">
+          <div class="setting-row-label">
+            <div class="setting-row-title" data-i18n="language.label">Language</div>
+            <div class="setting-row-desc">Applied immediately across all UI text</div>
+          </div>
+          <div class="setting-row-control">
+            <select id="setting-language" class="form-select">
+              <option value="en">English</option>
+              <option value="ta">தமிழ் (Tamil)</option>
+              <option value="hi">हिन्दी (Hindi)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Risk Thresholds -->
+    <div class="settings-section" id="section-risk">
+      <div class="settings-section-header">
+        <div class="settings-section-icon" style="background:var(--color-warning-light);color:var(--color-warning)"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div>
+          <div class="settings-section-title" data-i18n="settings.risk_section">Risk Thresholds</div>
+          <div class="settings-section-desc">Define risk score boundaries for each decision tier</div>
+        </div>
+      </div>
+      <div class="settings-section-body">
+        <div class="threshold-group">
+          <div class="threshold-item">
+            <div class="threshold-header">
+              <div class="threshold-name"><span class="badge badge-success badge-dot">Auto</span> <span data-i18n="settings.auto_threshold">Auto-Approve Threshold</span></div>
+              <span class="threshold-value" id="auto-threshold-slider-value">30</span>
+            </div>
+            <div class="threshold-desc">Actions with risk below this score are automatically approved</div>
+            <input type="range" id="auto-threshold-slider" class="form-range mt-2" min="0" max="100" value="30" step="5">
+            <div class="threshold-markers"><span class="threshold-marker">0</span><span class="threshold-marker">50</span><span class="threshold-marker">100</span></div>
+          </div>
+          <div class="threshold-item">
+            <div class="threshold-header">
+              <div class="threshold-name"><span class="badge badge-warning badge-dot">Confirm</span> <span data-i18n="settings.confirm_threshold">Confirmation Required</span></div>
+              <span class="threshold-value" id="confirm-threshold-slider-value">60</span>
+            </div>
+            <div class="threshold-desc">Actions between auto-approve and this score require confirmation</div>
+            <input type="range" id="confirm-threshold-slider" class="form-range mt-2" min="0" max="100" value="60" step="5">
+            <div class="threshold-markers"><span class="threshold-marker">0</span><span class="threshold-marker">50</span><span class="threshold-marker">100</span></div>
+          </div>
+          <div class="threshold-item">
+            <div class="threshold-header">
+              <div class="threshold-name"><span class="badge badge-danger badge-dot">Review</span> <span data-i18n="settings.review_threshold">Human Review</span></div>
+              <span class="threshold-value" id="review-threshold-slider-value">80</span>
+            </div>
+            <div class="threshold-desc">Actions above this score are escalated to human reviewers</div>
+            <input type="range" id="review-threshold-slider" class="form-range mt-2" min="0" max="100" value="80" step="5">
+            <div class="threshold-markers"><span class="threshold-marker">0</span><span class="threshold-marker">50</span><span class="threshold-marker">100</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="settings-section" id="section-notifications">
+      <div class="settings-section-header">
+        <div class="settings-section-icon" style="background:var(--color-success-light);color:var(--color-success)"><i class="fa-solid fa-bell"></i></div>
+        <div>
+          <div class="settings-section-title" data-i18n="settings.notifications_section">Notifications</div>
+          <div class="settings-section-desc">Configure when and how you receive alerts</div>
+        </div>
+      </div>
+      <div class="settings-section-body">
+        <div class="setting-row">
+          <div class="setting-row-label">
+            <div class="setting-row-title" data-i18n="settings.enable_notifications">Enable Notifications</div>
+            <div class="setting-row-desc">Show in-app notification banners</div>
+          </div>
+          <div class="setting-row-control">
+            <label class="form-toggle">
+              <input type="checkbox" id="notifications-enabled" class="toggle-input" checked>
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+        </div>
+        <div class="notification-options">
+          <div class="notification-option">
+            <input type="checkbox" id="notify-high-risk" checked>
+            <label for="notify-high-risk" class="notification-option-label">
+              <div class="notification-option-title" data-i18n="settings.notify_high_risk">Notify on High Risk</div>
+              <div class="notification-option-desc">Alert when an action exceeds the high-risk threshold</div>
+            </label>
+          </div>
+          <div class="notification-option">
+            <input type="checkbox" id="notify-completion" checked>
+            <label for="notify-completion" class="notification-option-label">
+              <div class="notification-option-title" data-i18n="settings.notify_completion">Notify on Completion</div>
+              <div class="notification-option-desc">Alert when an action finishes executing</div>
+            </label>
+          </div>
+          <div class="notification-option">
+            <input type="checkbox" id="notify-review" checked>
+            <label for="notify-review" class="notification-option-label">
+              <div class="notification-option-title" data-i18n="settings.notify_review">Notify on Review Required</div>
+              <div class="notification-option-desc">Alert when a new action enters your review queue</div>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Adaptive Learning -->
+    <div class="settings-section" id="section-learning">
+      <div class="settings-section-header">
+        <div class="settings-section-icon" style="background:rgba(124,58,237,0.10);color:#7C3AED"><i class="fa-solid fa-brain"></i></div>
+        <div>
+          <div class="settings-section-title" data-i18n="settings.learning_section">Adaptive Learning</div>
+          <div class="settings-section-desc">Configure AI self-improvement capabilities</div>
+        </div>
+      </div>
+      <div class="settings-section-body">
+        <div class="setting-row">
+          <div class="setting-row-label">
+            <div class="setting-row-title" data-i18n="settings.enable_learning">Enable Adaptive Learning</div>
+            <div class="setting-row-desc">Allow the system to learn from approval/rejection patterns</div>
+          </div>
+          <div class="setting-row-control">
+            <label class="form-toggle">
+              <input type="checkbox" id="adaptive-learning" class="toggle-input" checked>
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-label">
+            <div class="setting-row-title" data-i18n="settings.learning_rate">Learning Rate</div>
+            <div class="setting-row-desc">How aggressively the model adapts (0.01–1.0)</div>
+          </div>
+          <div class="setting-row-control">
+            <input type="number" id="learning-rate" class="form-input" value="0.1" min="0.01" max="1.0" step="0.01" style="width:100px">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WebSocket -->
+    <div class="settings-section" id="section-websocket">
+      <div class="settings-section-header">
+        <div class="settings-section-icon" style="background:var(--color-info-light);color:var(--color-info)"><i class="fa-solid fa-plug"></i></div>
+        <div>
+          <div class="settings-section-title" data-i18n="settings.websocket_section">WebSocket &amp; Real-time</div>
+          <div class="settings-section-desc">Configure the live data connection settings</div>
+        </div>
+      </div>
+      <div class="settings-section-body">
+        <div class="setting-row">
+          <div class="setting-row-label">
+            <div class="setting-row-title" data-i18n="settings.ws_url">WebSocket URL</div>
+          </div>
+          <div class="setting-row-control">
+            <input type="text" id="ws-url" class="form-input" placeholder="ws://host/ws" style="min-width:240px">
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-label">
+            <div class="setting-row-title" data-i18n="settings.ws_reconnect">Auto Reconnect</div>
+          </div>
+          <div class="setting-row-control">
+            <label class="form-toggle">
+              <input type="checkbox" id="ws-reconnect" class="toggle-input" checked>
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-label">
+            <div class="setting-row-title" data-i18n="settings.ws_interval">Reconnect Interval (ms)</div>
+          </div>
+          <div class="setting-row-control">
+            <input type="number" id="ws-interval" class="form-input" value="3000" min="500" max="30000" step="500" style="width:120px">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Audit -->
+    <div class="settings-section" id="section-audit">
+      <div class="settings-section-header">
+        <div class="settings-section-icon" style="background:var(--bg-surface-2);color:var(--text-secondary)"><i class="fa-solid fa-clock-rotate-left"></i></div>
+        <div>
+          <div class="settings-section-title" data-i18n="settings.audit_section">Audit Configuration</div>
+          <div class="settings-section-desc">Control how audit data is stored and retained</div>
+        </div>
+      </div>
+      <div class="settings-section-body">
+        <div class="setting-row">
+          <div class="setting-row-label">
+            <div class="setting-row-title" data-i18n="settings.audit_retention">Log Retention (days)</div>
+          </div>
+          <div class="setting-row-control">
+            <input type="number" id="audit-retention" class="form-input" value="90" min="7" max="3650" style="width:120px">
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-label">
+            <div class="setting-row-title" data-i18n="settings.audit_level">Audit Level</div>
+          </div>
+          <div class="setting-row-control">
+            <div class="audit-level-options" role="radiogroup">
+              <button type="button" class="audit-level-btn" data-level="minimal">Minimal</button>
+              <button type="button" class="audit-level-btn active" data-level="standard">Standard</button>
+              <button type="button" class="audit-level-btn" data-level="verbose">Verbose</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="settings-dirty-hint" class="hidden flex items-center gap-2 text-xs text-warning" style="padding:var(--space-2) 0">
+      <i class="fa-solid fa-circle-exclamation"></i> You have unsaved changes
+    </div>
+
+  </div>
+</div>
+
+<!-- Save Bar -->
+<div id="settings-save-bar" class="settings-save-bar mt-5">
+  <div class="settings-save-hint">
+    <i class="fa-solid fa-floppy-disk"></i>
+    Changes will be applied immediately
+  </div>
+  <div class="settings-save-actions">
+    <button type="button" class="btn btn-secondary" id="settings-reset-btn-bar" data-i18n="settings.reset_defaults">Reset</button>
+    <button type="button" class="btn btn-primary" id="settings-save-btn">
+      <i class="fa-solid fa-floppy-disk"></i>
+      <span data-i18n="settings.save">Save Settings</span>
+    </button>
+  </div>
+</div>
+</form>
+{% endblock %}
+
+{% block page_js %}
+<script src="{{ url_for('static', path='js/settings.js') }}"></script>
+{% endblock %}

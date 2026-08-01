@@ -1,0 +1,51 @@
+/* ============================================================
+   SENTINEL AI — DASHBOARD PAGE STYLES
+   ============================================================ */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-5);margin-bottom:var(--space-8)}
+.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-5);margin-bottom:var(--space-5)}
+.dashboard-grid-wide{display:grid;grid-template-columns:2fr 1fr;gap:var(--space-5);margin-bottom:var(--space-5)}
+
+.health-indicators{display:flex;flex-direction:column;gap:var(--space-3)}
+.health-row{display:flex;align-items:center;justify-content:space-between;padding:var(--space-3) var(--space-4);border-radius:var(--border-radius);background:var(--bg-surface-2);transition:background var(--transition-fast)}
+.health-row:hover{background:var(--bg-surface-3)}
+.health-row-left{display:flex;align-items:center;gap:var(--space-3)}
+.health-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.health-dot.online{background:var(--color-success);box-shadow:0 0 6px rgba(22,163,74,.5)}
+.health-dot.warning{background:var(--color-warning);box-shadow:0 0 6px rgba(245,158,11,.5)}
+.health-dot.offline{background:var(--color-danger);box-shadow:0 0 6px rgba(220,38,38,.5)}
+.health-service-name{font-size:var(--font-size-sm);font-weight:500;color:var(--text-primary)}
+.health-service-desc{font-size:var(--font-size-xs);color:var(--text-tertiary)}
+.health-latency{font-size:var(--font-size-xs);font-weight:500;color:var(--text-secondary);font-family:var(--font-mono)}
+
+.activity-feed{display:flex;flex-direction:column}
+.activity-item{display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-3) 0;border-bottom:1px solid var(--border-color)}
+.activity-item:last-child{border-bottom:none}
+.activity-icon{width:32px;height:32px;border-radius:var(--border-radius);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.activity-content{flex:1;min-width:0}
+.activity-title{font-size:var(--font-size-sm);font-weight:500;color:var(--text-primary)}
+.activity-meta{display:flex;align-items:center;gap:var(--space-3);margin-top:3px;flex-wrap:wrap}
+.activity-time,.activity-dept{font-size:var(--font-size-xs);color:var(--text-tertiary)}
+
+.chart-container{position:relative;width:100%}
+.chart-container-sm{height:200px}.chart-container-md{height:260px}.chart-container-lg{height:320px}
+.chart-legend{display:flex;flex-wrap:wrap;gap:var(--space-4);margin-top:var(--space-4)}
+.legend-item{display:flex;align-items:center;gap:var(--space-2);font-size:var(--font-size-xs);color:var(--text-secondary);font-weight:500}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.legend-line{width:16px;height:3px;border-radius:2px;flex-shrink:0}
+
+.audit-mini-list{display:flex;flex-direction:column}
+.audit-mini-item{display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-3) 0;border-bottom:1px solid var(--border-color)}
+.audit-mini-item:last-child{border-bottom:none}
+.audit-mini-dot{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px}
+.audit-mini-content{flex:1;min-width:0}
+.audit-mini-title{font-size:var(--font-size-sm);font-weight:500;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.audit-mini-sub{font-size:var(--font-size-xs);color:var(--text-tertiary);margin-top:2px}
+.audit-mini-time{font-size:var(--font-size-xs);color:var(--text-tertiary);white-space:nowrap;font-family:var(--font-mono)}
+
+.mini-bar-chart{display:flex;align-items:flex-end;gap:4px;height:48px}
+.mini-bar{flex:1;background:var(--color-primary-muted);border-radius:3px 3px 0 0;min-height:4px;transition:height .6s cubic-bezier(0.4,0,0.2,1),background var(--transition-fast)}
+.mini-bar:hover{background:var(--color-primary)}
+
+@media(max-width:1200px){.stats-grid{grid-template-columns:repeat(2,1fr)}.dashboard-grid-wide{grid-template-columns:1fr}}
+@media(max-width:900px){.dashboard-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.stats-grid{grid-template-columns:1fr}}

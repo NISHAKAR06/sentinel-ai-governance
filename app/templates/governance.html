@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block title %}Governance{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/governance.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-header-row">
+    <div>
+      <h1 class="page-title" data-i18n="governance.title">Governance</h1>
+      <p class="page-subtitle" data-i18n="governance.subtitle">Policy enforcement and decision workflows</p>
+    </div>
+    <span class="badge badge-info badge-dot">Policy Engine Active</span>
+  </div>
+</div>
+
+<!-- Workflow Stepper -->
+<div class="governance-stepper-card card mb-5">
+  <div class="card-header">
+    <span class="card-title">
+      <i class="fa-solid fa-diagram-project" style="color:var(--color-primary)"></i>
+      <span data-i18n="governance.workflow_timeline">Workflow Timeline</span>
+    </span>
+    <span class="text-xs text-tertiary">
+      <span data-i18n="governance.current_stage">Current Stage:</span>
+      <strong id="current-stage-text" style="color:var(--color-primary);margin-left:4px">Intake</strong>
+    </span>
+  </div>
+  {% include 'components/workflow.html' %}
+</div>
+
+<div class="governance-layout">
+
+  <!-- Left Column -->
+  <div class="governance-main">
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">
+          <i class="fa-solid fa-circle-info" style="color:var(--color-info)"></i>
+          Action Metadata
+        </span>
+      </div>
+      <div class="metadata-grid">
+        <div class="metadata-item">
+          <span class="metadata-label" data-i18n="governance.reversibility">Reversibility</span>
+          <span class="metadata-value" id="meta-reversibility">—</span>
+        </div>
+        <div class="metadata-item">
+          <span class="metadata-label" data-i18n="governance.data_scope">Data Scope</span>
+          <span class="metadata-value" id="meta-data-scope">—</span>
+        </div>
+        <div class="metadata-item">
+          <span class="metadata-label" data-i18n="governance.regulation">Regulation</span>
+          <span class="metadata-value" id="meta-regulation">—</span>
+        </div>
+        <div class="metadata-item">
+          <span class="metadata-label" data-i18n="governance.confidence">Confidence</span>
+          <span class="metadata-value" id="meta-confidence">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">
+          <i class="fa-solid fa-shield-halved" style="color:var(--color-primary)"></i>
+          <span data-i18n="governance.policy_rules">Active Policy Rules</span>
+        </span>
+        <span class="badge badge-primary" id="policy-count">—</span>
+      </div>
+      <div id="policy-rules-list" class="policy-rules-list">
+        <div class="skeleton skeleton-text" style="height:52px;border-radius:10px;margin-bottom:8px"></div>
+        <div class="skeleton skeleton-text" style="height:52px;border-radius:10px;margin-bottom:8px;width:90%"></div>
+        <div class="skeleton skeleton-text" style="height:52px;border-radius:10px;width:80%"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">
+          <i class="fa-solid fa-timeline" style="color:var(--text-tertiary)"></i>
+          <span data-i18n="governance.workflow_timeline">Event Timeline</span>
+        </span>
+      </div>
+      <div id="workflow-timeline" class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot primary"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="timeline-content">
+            <div class="timeline-content-title">Awaiting action submission</div>
+            <div class="timeline-content-meta">Submit a request from AI Assistant to begin governance</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Right Column -->
+  <div class="governance-aside">
+
+    <!-- Risk Gauge -->
+    <div class="card risk-score-card">
+      <div class="card-header">
+        <span class="card-title">
+          <i class="fa-solid fa-gauge" style="color:var(--color-warning)"></i>
+          <span data-i18n="governance.risk_score">Risk Score</span>
+        </span>
+        <span class="badge badge-neutral" id="risk-level-badge">—</span>
+      </div>
+      <div class="gauge-wrapper">
+        <svg id="risk-gauge-svg" width="160" height="90" viewBox="0 0 160 90" role="img" aria-label="Risk gauge">
+          <path class="gauge-track" fill="none" stroke="var(--bg-surface-2)" stroke-width="14"
+                stroke-linecap="round" d="M 16 88 A 64 64 0 1 1 144 88"/>
+          <path class="gauge-fill" fill="none" stroke="#F59E0B" stroke-width="14"
+                stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="201"
+                d="M 16 88 A 64 64 0 1 1 144 88"/>
+        </svg>
+        <div class="gauge-center-text" style="top:55%">
+          <div class="gauge-score-value" id="gauge-score-value" aria-live="polite">0</div>
+          <div class="gauge-score-label text-xs text-tertiary" data-i18n="governance.risk_score">Risk</div>
+        </div>
+      </div>
+      <div class="divider" style="margin:var(--space-4) 0"></div>
+      <div class="text-xs font-semi text-tertiary mb-3" style="letter-spacing:.05em;text-transform:uppercase"
+           data-i18n="governance.risk_breakdown">Risk Breakdown</div>
+      <div id="risk-breakdown-list" class="risk-breakdown-list">
+        <div class="skeleton skeleton-text mb-2"></div>
+        <div class="skeleton skeleton-text mb-2" style="width:85%"></div>
+        <div class="skeleton skeleton-text" style="width:70%"></div>
+      </div>
+    </div>
+
+    <!-- Decision Card -->
+    <div class="decision-card card">
+      <div class="card-header">
+        <span class="card-title">
+          <i class="fa-solid fa-scale-balanced" style="color:var(--color-primary)"></i>
+          <span data-i18n="governance.decision">Decision</span>
+        </span>
+      </div>
+      <p class="text-xs text-secondary mb-3">Governance engine recommendation based on risk score and policy rules.</p>
+      <div class="decision-options" role="radiogroup">
+
+        <div class="decision-option" data-decision="auto" role="radio" tabindex="0" aria-checked="false">
+          <div class="decision-option-icon auto"><i class="fa-solid fa-bolt"></i></div>
+          <div class="decision-option-content">
+            <div class="decision-option-label text-success" data-i18n="governance.auto_approve">AUTO APPROVE</div>
+            <div class="decision-option-desc">Risk below threshold — execute autonomously</div>
+          </div>
+          <div class="decision-option-check"></div>
+        </div>
+
+        <div class="decision-option" data-decision="confirm" role="radio" tabindex="0" aria-checked="false">
+          <div class="decision-option-icon confirm"><i class="fa-solid fa-hand"></i></div>
+          <div class="decision-option-content">
+            <div class="decision-option-label text-warning" data-i18n="governance.require_confirm">REQUIRE CONFIRMATION</div>
+            <div class="decision-option-desc">Needs explicit user confirmation before execution</div>
+          </div>
+          <div class="decision-option-check"></div>
+        </div>
+
+        <div class="decision-option selected-review" data-decision="review" role="radio" tabindex="0" aria-checked="true">
+          <div class="decision-option-icon review"><i class="fa-solid fa-user-gear"></i></div>
+          <div class="decision-option-content">
+            <div class="decision-option-label text-danger" data-i18n="governance.human_review">HUMAN REVIEW</div>
+            <div class="decision-option-desc">High risk — requires human reviewer approval</div>
+          </div>
+          <div class="decision-option-check" style="background:var(--color-danger);border-color:var(--color-danger)">
+            <i class="fa-solid fa-check" style="color:#fff;font-size:9px"></i>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block page_js %}
+<script src="{{ url_for('static', path='js/governance.js') }}"></script>
+{% endblock %}

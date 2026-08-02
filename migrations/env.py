@@ -4,12 +4,34 @@ from alembic import context
 import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from app.database.database import Base
-import app.models  # noqa: F401
+# `Base` and models are imported after we adjust the config URL below,
+# so Alembic uses the sync URL when loading the metadata.
 
 config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
+
+# Allow overriding the SQLAlchemy URL via environment variables in CI/containers.
+# Prefer `SYNC_DATABASE_URL` (explicit sync URL) then `DATABASE_URL` (may be async).
+import os
+env_sync_url = os.getenv("SYNC_DATABASE_URL") or os.getenv("DATABASE_URL")
+if env_sync_url:
+    # If an async driver is present (e.g. postgresql+asyncpg), convert to a sync driver for Alembic.
+    if env_sync_url.startswith("postgresql+asyncpg://"):
+        env_sync_url = env_sync_url.replace("postgresql+asyncpg://", "postgresql+psycopg2://", 1)
+    # If scheme is bare 'postgresql://', ensure psycopg2 driver is used for sync migrations.
+    if env_sync_url.startswith("postgresql://"):
+        env_sync_url = env_sync_url.replace("postgresql://", "postgresql+psycopg2://", 1)
+    config.set_main_option("sqlalchemy.url", env_sync_url)
+
+# Prevent the application from creating an async engine at import time during
+# migrations (the migration environment uses a sync engine). This tells
+# `app.database.database` to skip engine creation.
+os.environ.setdefault("ALEMBIC_DISABLE_ENGINE", "true")
+
+# Now import the application's Base and models (after URL override).
+from app.database.database import Base
+import app.models  # noqa: F401
 
 target_metadata = Base.metadata
 

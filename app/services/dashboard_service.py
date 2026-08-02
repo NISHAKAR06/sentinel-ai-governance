@@ -52,20 +52,21 @@ class DashboardService:
             RiskDistribution, ApprovalTrends,
         )
 
-        recent_action_list = [
-            RecentAction(
-                id=str(a.id),
-                action=a.intent,
-                action_type=a.operation_type,
-                resource=a.target_resource,
-                risk_level=a.risk_level,
-                risk_score=a.risk_score,
-                status=a.status,
-                department=a.department,
-                created_at=a.created_at,
+        recent_action_list = []
+        for a in recent_actions:
+            recent_action_list.append(
+                RecentAction(
+                    id=str(a.id),
+                    action=(a.intent or ""),
+                    action_type=(a.operation_type or ""),
+                    resource=(a.target_resource or ""),
+                    risk_level=(a.risk_level or "unknown"),
+                    risk_score=float(a.risk_score or 0.0),
+                    status=(a.status or "unknown"),
+                    department=a.department,
+                    created_at=(a.created_at),
+                )
             )
-            for a in recent_actions
-        ]
 
         audit_list = [
             AuditTimelineEntry(

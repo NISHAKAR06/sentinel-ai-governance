@@ -5,7 +5,9 @@ Supports both PostgreSQL (production) and SQLite (local dev).
 from __future__ import annotations
 
 import uuid
+from typing import Any
 from sqlalchemy import String
+from sqlalchemy.engine import make_url
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, declared_attr
 from sqlalchemy import MetaData
@@ -111,19 +113,43 @@ class Base(DeclarativeBase):
 
 # ── Async engine (used at runtime) ───────────────────────────
 def create_engine() -> AsyncEngine:
-    url = settings.DATABASE_URL
-    is_sqlite = url.startswith("sqlite")
+    raw_url = settings.DATABASE_URL
+    if raw_url.startswith("postgres://") and not raw_url.startswith("postgresql+"):
+        raw_url = raw_url.replace("postgres://", "postgresql+asyncpg://", 1)
+    if raw_url.startswith("postgresql://") and not raw_url.startswith("postgresql+"):
+        raw_url = raw_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+
+    url = make_url(raw_url)
+    is_sqlite = raw_url.startswith("sqlite")
     if is_sqlite:
         from sqlalchemy.pool import StaticPool
         return create_async_engine(
-            url,
+            raw_url,
             echo=settings.DATABASE_ECHO,
             connect_args={"check_same_thread": False},
             poolclass=StaticPool,
         )
+
+    connect_args: dict[str, Any] = {}
+    if url.drivername == "postgresql+asyncpg":
+        ssl_val = None
+        if url.query.get("sslmode"):
+            ssl_val = url.query["sslmode"]
+        elif url.query.get("ssl"):
+            ssl_val = url.query["ssl"]
+            if isinstance(ssl_val, str) and ssl_val.lower() in {"true", "1", "yes"}:
+                ssl_val = "require"
+        if ssl_val:
+            connect_args["ssl"] = ssl_val
+        # Remove asyncpg-specific query args not supported by asyncpg.connect()
+        if url.query:
+            filtered_query = {k: v for k, v in url.query.items() if k not in ["sslmode", "ssl", "channel_binding"]}
+            url = url.set(query=filtered_query)
+
     return create_async_engine(
         url,
         echo=settings.DATABASE_ECHO,
+        connect_args=connect_args or None,
         pool_size=settings.DB_POOL_SIZE,
         max_overflow=settings.DB_MAX_OVERFLOW,
         pool_pre_ping=True,
@@ -131,4 +157,15 @@ def create_engine() -> AsyncEngine:
     )
 
 
-engine: AsyncEngine = create_engine()
+import os
+
+# When running Alembic migrations we import the migrations `env.py` which may
+# want to import `app.database`. Creating an async engine at import time can
+# cause problems for migrations (imports require a sync driver). To avoid this
+# when running migrations, set the environment variable
+# `ALEMBIC_DISABLE_ENGINE=true` so the engine is not created here.
+engine: AsyncEngine | None
+if os.getenv("ALEMBIC_DISABLE_ENGINE", "false").lower() == "true":
+    engine = None
+else:
+    engine = create_engine()

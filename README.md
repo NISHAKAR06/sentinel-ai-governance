@@ -1,176 +1,332 @@
-# Sentinel AI Governance
+<div align="center">
 
-FastAPI-based governance platform. This README covers local development, Docker, and Vercel container deployment.
+# 🤖 Sentinel AI Governance Platform
+**Enterprise AI Governance, Observability & Graduated Autonomy Engine**
 
-## Quick requirements
+[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Gemini LLM](https://img.shields.io/badge/Gemini-8E75B2?style=for-the-badge&logo=googlebard)](https://deepmind.google/technologies/gemini/)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white)](https://www.sqlalchemy.org/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
-- Python 3.11 (recommended)
-- Conda (for the provided Dockerfile) or Docker
-- Docker (for local container testing)
-- Vercel account (for production deploy)
+[Live Deployments](#live-production-deployments) • [Overview](#overview) • [Key Features](#key-features) • [Tech Stack](#tech-stack) • [Repository Structure](#repository-structure) • [Getting Started](#getting-started) • [Deployment](#deployment) • [License](#license)
 
-## Local development (Conda)
+</div>
 
-1. Create & activate conda env:
+---
+
+## 🚀 Live Production Deployments
+- **Web App**: [https://sentinel-ai-governance.onrender.com/](https://sentinel-ai-governance.onrender.com/)
+
+---
+
+## 📖 Overview
+**Sentinel AI Governance Platform** is an enterprise-grade "Trust Layer" designed to securely manage, monitor, and audit autonomous AI systems. As organizations scale AI agents into production, the lack of observability and compliance guardrails creates significant operational risk. Sentinel bridges this gap.
+
+Built on a high-performance FastAPI architecture and natively integrated with Google Gemini, this platform provides:
+
+- **Decision Path Explainability**: Complete transparency into *why* an AI agent made a specific choice, generating immutable audit trails for compliance.
+- **Graduated Autonomy**: Enforced policy checks and automated Human-in-the-Loop (HITL) workflows when agents attempt high-risk or uncertain operations.
+- **Real-time Observability**: Live monitoring of agent behaviors, risk metrics, and system health via bi-directional WebSockets.
+
+By wrapping AI execution in strict, observable guardrails, Sentinel empowers enterprises to confidently deploy autonomous systems while maintaining absolute alignment with corporate and regulatory standards.
+
+## ✨ Core Capabilities
+
+- 🛡️ **Automated Policy Enforcement**: Dynamic rule engines (e.g., `RiskEngine`, `PolicyEngine`) validate agent actions against predefined corporate guidelines before execution.
+- 🔍 **Decision Path Explainability**: Comprehensive `audit_logs` record the contextual rationale behind every LLM-generated decision, ensuring full Unit 7 compliance.
+- ⚡ **Real-Time Observability**: A bi-directional WebSocket architecture streams live telemetry, risk scoring, and agent state directly to the administrative frontend.
+- 🧠 **Graduated Autonomy Models**: Intelligent routing that escalates high-risk, low-confidence decisions to human reviewers via the `/review` portal.
+- 🔐 **Enterprise-Grade Security**: JWT-based stateless authentication, bcrypt cryptographic hashing, and rigorous Role-Based Access Control (RBAC).
+- 📊 **Executive Dashboards**: Server-side rendered Jinja2 interfaces providing a unified pane of glass for analytics, agent management, and governance overviews.
+
+---
+
+## 🛠 Technology Stack
+
+| Architecture Layer | Core Technologies | Primary Function |
+| :--- | :--- | :--- |
+| **API Gateway & Routing** | FastAPI, Uvicorn, Pydantic | High-performance, asynchronous REST framework with strict schema validation. |
+| **Data Persistence** | PostgreSQL, asyncpg | Highly relational, ACID-compliant data storage utilizing asynchronous drivers. |
+| **ORM & Migrations** | SQLAlchemy 2.0, Alembic | Advanced data modeling and seamless schema version control. |
+| **AI Inference** | Google Gemini (`google-generativeai`) | The core LLM engine driving intelligent decision-making and planning. |
+| **Presentation Layer** | HTML5, CSS3, Vanilla JS, Jinja2 | SSR (Server-Side Rendered) templates delivering secure administrative portals. |
+| **Identity & Access** | PyJWT, Passlib, bcrypt | Secure credential storage, tokenized auth, and cryptographic hashing. |
+
+---
+
+## 📂 Repository Structure
+
+```text
+sentinel-ai-governance/
+│
+├── app/
+│   │
+│   ├── main.py
+│   ├── config.py
+│   ├── dependencies.py
+│   │
+│   ├── api/
+│   │   │
+│   │   ├── api.py
+│   │   ├── chat_routes.py
+│   │   ├── governance_routes.py
+│   │   ├── review_routes.py
+│   │   ├── execution_routes.py
+│   │   ├── dashboard_routes.py
+│   │   ├── analytics_routes.py
+│   │   └── settings_routes.py
+│   │
+│   ├── agents/
+│   │   │
+│   │   ├── base_agent.py
+│   │   ├── ai_agent.py
+│   │   ├── planner_agent.py
+│   │   ├── governance_agent.py
+│   │   └── review_agent.py
+│   │
+│   ├── engines/
+│   │   │
+│   │   ├── risk_engine.py
+│   │   ├── policy_engine.py
+│   │   └── decision_engine.py
+│   │
+│   ├── services/
+│   │   │
+│   │   ├── llm_service.py
+│   │   ├── execution_service.py
+│   │   ├── audit_service.py
+│   │   ├── learning_service.py
+│   │   ├── dashboard_service.py
+│   │   └── websocket_service.py
+│   │
+│   ├── repositories/
+│   │   │
+│   │   ├── base_repository.py
+│   │   ├── employee_repository.py
+│   │   ├── knowledge_repository.py
+│   │   ├── document_repository.py
+│   │   ├── review_repository.py
+│   │   ├── audit_repository.py
+│   │   └── settings_repository.py
+│   │
+│   ├── database/
+│   │   │
+│   │   ├── database.py
+│   │   ├── session.py
+│   │   ├── seed.py
+│   │   └── init_db.py
+│   │
+│   ├── models/
+│   │   │
+│   │   ├── employee.py
+│   │   ├── knowledge.py
+│   │   ├── document.py
+│   │   ├── review.py
+│   │   ├── audit.py
+│   │   ├── settings.py
+│   │   └── action.py
+│   │
+│   ├── schemas/
+│   │   │
+│   │   ├── chat_schema.py
+│   │   ├── action_schema.py
+│   │   ├── governance_schema.py
+│   │   ├── review_schema.py
+│   │   ├── dashboard_schema.py
+│   │   ├── analytics_schema.py
+│   │   └── settings_schema.py
+│   │
+│   ├── prompts/
+│   │   │
+│   │   ├── system_prompt.py
+│   │   ├── planner_prompt.py
+│   │   └── governance_prompt.py
+│   │
+│   ├── core/
+│   │   │
+│   │   ├── logger.py
+│   │   ├── constants.py
+│   │   ├── enums.py
+│   │   ├── security.py
+│   │   ├── websocket_manager.py
+│   │   └── exceptions.py
+│   │
+│   ├── utils/
+│   │   │
+│   │   ├── parser.py
+│   │   ├── formatter.py
+│   │   ├── validators.py
+│   │   ├── helper.py
+│   │   └── response.py
+│   │
+│   ├── static/
+│   │   │
+│   │   ├── css/
+│   │   │   ├── style.css
+│   │   │   ├── dashboard.css
+│   │   │   ├── assistant.css
+│   │   │   ├── governance.css
+│   │   │   ├── review.css
+│   │   │   ├── analytics.css
+│   │   │   └── settings.css
+│   │   │
+│   │   ├── js/
+│   │   │   ├── app.js
+│   │   │   ├── dashboard.js
+│   │   │   ├── assistant.js
+│   │   │   ├── governance.js
+│   │   │   ├── review.js
+│   │   │   ├── analytics.js
+│   │   │   ├── settings.js
+│   │   │   ├── websocket.js
+│   │   │   └── api.js
+│   │   │
+│   │   ├── icons/
+│   │   ├── images/
+│   │   └── animations/
+│   │
+│   ├── templates/
+│   │   │
+│   │   ├── login.html
+│   │   ├── dashboard.html
+│   │   ├── assistant.html
+│   │   ├── governance.html
+│   │   ├── review.html
+│   │   ├── analytics.html
+│   │   ├── settings.html
+│   │   ├── profile.html
+│   │   └── components/
+│   │       ├── navbar.html
+│   │       ├── sidebar.html
+│   │       ├── footer.html
+│   │       ├── modal.html
+│   │       ├── loader.html
+│   │       ├── toast.html
+│   │       ├── workflow.html
+│   │       ├── risk_card.html
+│   │       └── review_card.html
+│   │
+│   └── websocket/
+│       └── events.py
+│
+├── tests/
+│   ├── test_agents.py
+│   ├── test_engines.py
+│   ├── test_services.py
+│   ├── test_api.py
+│   └── test_database.py
+│
+├── mock_data/
+│   ├── employees.csv
+│   ├── knowledge_base.csv
+│   ├── documents.csv
+│   ├── review_queue.csv
+│   ├── audit_logs.csv
+│   └── settings.json
+│
+├── requirements.txt
+├── .env
+├── README.md
+├── Dockerfile
+└── docker-compose.yml
+```
+
+---
+
+## 🚀 Getting Started
+
+> [!IMPORTANT]  
+> Ensure you have **Python 3.11+** installed and a **PostgreSQL** instance running before beginning the local setup.
+
+### 1. Repository Initialization
+Clone the repository and isolate dependencies within a virtual environment:
 
 ```bash
-conda create -y -n sentinel python=3.11
-conda activate sentinel
+git clone https://github.com/your-org/sentinel-ai-governance.git
+cd sentinel-ai-governance
+
+# Initialize and activate the virtual environment
+python -m venv .venv
+source .venv/bin/activate  # Windows users: .venv\Scripts\activate
+
+# Install required packages
 pip install -r requirements.txt
 ```
 
-2. Run the app locally:
+### 2. Environment Configuration
+The platform relies heavily on environment variables for security and configuration. Create a `.env` file at the repository root:
 
-```bash
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```ini
+# Application Settings
+APP_NAME="Sentinel AI Governance"
+APP_VERSION="1.0.0"
+DEBUG=true
+PORT=8000
+HOST="0.0.0.0"
+
+# Database Configuration
+# Format: postgresql+asyncpg://user:password@host:port/dbname
+DATABASE_URL="postgresql+asyncpg://postgres:postgres@localhost:5432/sentinel_db"
+
+# Security Credentials
+SECRET_KEY="<generate-a-secure-random-string>"
+JWT_SECRET="<generate-a-secure-jwt-secret>"
+
+# Artificial Intelligence
+GEMINI_API_KEY="<your-google-gemini-api-key>"
 ```
 
-Open http://localhost:8000/health to verify.
-
-## Docker (Container build used by Vercel)
-
-Build and run the image locally:
-
-```bash
-docker build -t sentinel-ai-governance .
-docker run --rm -p 8000:8000 sentinel-ai-governance
-```
-
-If the container fails, check the container logs for missing environment variables or runtime errors.
-
-## Vercel deployment (Container)
-
-This repository contains `vercel.json` that instructs Vercel to build the repository using the `Dockerfile` (container deployment).
-
-Steps:
-
-- Commit and push your branch to the repo.
-- In Vercel dashboard, import the repository and select the `main` branch.
-- Add required environment variables in the Vercel project settings (see list below).
-- Deploy via the Vercel UI or locally with:
-
-```bash
-vercel --prod
-```
-
-Vercel will build the container using the included `Dockerfile` and run the container.
-
-## Serverless fallback
-
-A minimal serverless endpoint `api/health.py` is provided as a fallback when not deploying the container.
-
-## Environment variables (recommended)
-
-At minimum configure these in Vercel (and locally):
-
-- `SECRET_KEY` (string)
-- `DATABASE_URL` (e.g. postgres://user:pass@host:port/db)
-- `JWT_SECRET`
-- `GEMINI_API_KEY` (if using Gemini LLM)
-- `DEBUG` (set `false` in production)
-- `LOG_LEVEL` (optional)
-
-Notes:
-
-- Do not use SQLite for production on Vercel — use an external managed Postgres or equivalent.
-- The current `Dockerfile` uses a Conda base (larger image). For smaller builds, consider switching to `python:3.11-slim` and using `pip` only.
-
-## Troubleshooting
-
-- Container build is large due to Conda; allow extra time on first build.
-- If ports or DB connections fail on Vercel, ensure environment variables and network access (managed DB) are configured.
-- Check app logs in Vercel dashboard for runtime errors.
-
-## Next steps I can do for you
-
-- Convert `Dockerfile` to a smaller `python:3.11-slim` image (faster builds).
-- Run a local Docker build and capture logs to debug the previous `docker run` failure.
-
-## End-to-end overview
-
-- **Source**: Developers push code to `main` (or PR branches) in GitHub.
-- **CI**: Run tests, linting, and build container (recommended: GitHub Actions) on PRs.
-- **Build**: Vercel builds the container using `Dockerfile` and `vercel.json` (or uses serverless for small endpoints).
-- **Run**: The container runs the FastAPI app; environment variables are injected from Vercel project settings.
-- **Data**: Use a managed Postgres instance (set `DATABASE_URL`) — migrations are applied with Alembic.
-- **Observability**: Forward logs to a central log provider and configure health checks (`/health`).
-
-## Architecture & components
-
-- **FastAPI**: HTTP API + templated UI served by Jinja2.
-- **Uvicorn**: ASGI server used inside the container.
-- **Database**: SQLAlchemy + async drivers; Alembic for migrations.
-- **LLM**: Gemini (via `google-generativeai`) configured with `GEMINI_API_KEY`.
-- **Websockets**: Real-time events handled by the project's websocket module.
-
-## CI/CD recommendations
-
-- Add a GitHub Actions workflow to run tests and build the Docker image on PRs. Example jobs:
-  - `lint` — run `ruff`/`flake8`/`black` (optional)
-  - `test` — run `pytest -q`
-  - `build` — build Docker image and publish (optional for Vercel)
-- Protect `main` branch and require passing checks before merge.
-
-## Database migrations & seed
-
-- Run migrations locally with Alembic before deploying or include migration step in CI:
-
+### 3. Database Migration & Seeding
+Synchronize your local PostgreSQL instance with the SQLAlchemy models, then optionally seed it with mock data for testing:
 ```bash
 alembic upgrade head
 ```
 
-- Seed initial data (employees, settings) using `database/seed.py` or `app.database.seed` helper (the project contains `database/seed.py`).
+### 4. Application Launch
+Start the highly-concurrent Uvicorn server:
+```bash
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+- 🖥️ **Administrator Console**: [http://localhost:8000/dashboard](http://localhost:8000/dashboard)
+- 📚 **Swagger API Reference**: [http://localhost:8000/api/docs](http://localhost:8000/api/docs)
+- 🩺 **System Health**: [http://localhost:8000/health](http://localhost:8000/health)
 
-## Testing
+---
 
-- Run unit tests:
+## 🐳 Deployment Architecture
+
+The Sentinel platform is container-native and designed to run anywhere.
+
+### Docker Infrastructure
+A robust `Dockerfile` and `docker-compose.yml` are provided for immediate containerized deployment (ideal for AWS EC2, ECS, or GCP).
 
 ```bash
-pytest tests -q
+# Build the application image
+docker build -t sentinel-ai-governance .
+
+# Launch as a background daemon
+docker run -d -p 8000:8000 --env-file .env sentinel-ai-governance
 ```
 
-- Aim for CI to run tests on every PR.
+### Serverless & Vercel
+This repository is pre-configured with a `vercel.json` file, enabling zero-config deployments to Vercel via their container runtime. 
+> [!WARNING]
+> When deploying to serverless environments, you **must** connect to a managed PostgreSQL provider (e.g., AWS RDS, Supabase, Neon). Local SQLite fallback is not supported in production.
 
-## Monitoring & logging
+---
 
-- Configure `LOG_LEVEL` and a remote log sink (Datadog, LogDNA, Papertrail).
-- Use the `/health` endpoint for basic uptime checks.
+## 🧪 Quality Assurance & Testing
 
-## Security & secrets
+Sentinel maintains strict quality controls. Execute the comprehensive Pytest suite to validate the core routing, database abstractions, and agent logic:
 
-- Keep secrets in Vercel environment variables, never in the repo.
-- Rotate `SECRET_KEY` and `JWT_SECRET` regularly.
-- Use HTTPS (Vercel uses TLS by default) and validate external DB connections.
+```bash
+# Run unit and integration tests with verbosity
+pytest tests/ -v
+```
 
-## Performance & scaling
+---
 
-- Container-based deployment: scale by increasing replicas or using Vercel's concurrency settings.
-- Offload heavy LLM calls to async background tasks or external worker queues.
-
-## Innovation & extension points
-
-- Add modular policy engines in `engines/` to experiment with governance rules.
-- Swap LLM providers by abstracting LLM calls in `services/llm_service.py`.
-- Add A/B testing for policy thresholds by storing experiment configs in the `settings` table.
-
-## Postscript (PS)
-
-- This repository is configured to deploy on Vercel using a Docker container. If you prefer faster builds, I recommend converting to a `python:3.11-slim` image (smaller and quicker). For full serverless conversion, we'd need to rewrite persistent-file and DB usage to external services only.
-
-## Production deployment checklist
-
-- [ ] Configure managed Postgres and set `DATABASE_URL` in Vercel.
-- [ ] Add `SECRET_KEY`, `JWT_SECRET`, `GEMINI_API_KEY` in Vercel secrets.
-- [ ] Set `DEBUG=false` in production.
-- [ ] Run Alembic migrations after deploy (or include migration step in startup if safe).
-- [ ] Configure logging/monitoring and health checks.
-
-## Contact / help
-
-If you want, I can:
-
-- Convert the Dockerfile to a slim image.
-- Create GitHub Actions workflows for CI.
-- Run a local Docker build and troubleshoot the failure you saw.
-
-* I’ll add the [vercel.json](<vscode-file://vscode-app/c:/Users/NISHAKART/AppData/Local/Programs/Microsoft%20VS%20Code/e4c7e7b1d6/resources/app/out/vs/code/electron-browser/workbench/workbench.html>) proxy rewrite and move static assets to Vercel (Hybrid, quick).
+<div align="center">
+<i>Engineered for enterprise scalability, uncompromising security, and fully compliant AI autonomy.</i>
+</div>

@@ -198,6 +198,7 @@ const AuditPage = (() => {
     document.querySelectorAll('.audit-view-btn').forEach(btn => btn.addEventListener('click', () => _setViewMode(btn.dataset.view)));
     document.getElementById('export-csv-btn')?.addEventListener('click', exportCSV);
     document.getElementById('export-json-btn')?.addEventListener('click', exportJSON);
+    document.getElementById('audit-refresh')?.addEventListener('click', load);
   }
 
   document.addEventListener('DOMContentLoaded', init);

@@ -159,6 +159,7 @@ const AnalyticsPage = (() => {
     document.getElementById('export-report-btn')?.addEventListener('click', () => {
       SentinelAPI.downloadFile(`/api/v1/analytics/export?period=${period}`, `analytics_report_${period}.csv`).catch(() => {});
     });
+    document.getElementById('analytics-refresh')?.addEventListener('click', () => loadAll(period));
     loadAll();
   }
 

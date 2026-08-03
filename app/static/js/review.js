@@ -372,6 +372,8 @@ const ReviewPage = (() => {
     });
     // Export CSV
     document.getElementById('export-csv-btn')?.addEventListener('click', exportCSV);
+    // Refresh Data
+    document.getElementById('review-refresh')?.addEventListener('click', load);
   }
 
   document.addEventListener('DOMContentLoaded', init);

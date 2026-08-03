@@ -42,6 +42,186 @@ By wrapping AI execution in strict, observable guardrails, Sentinel empowers ent
 
 ---
 
+## 🏛️ System Architecture
+
+The Sentinel platform operates through a deeply layered architecture, ensuring that every AI action is validated, governed, and completely auditable.
+
+```text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                               END USER                                      │
+│                     Employee / Manager / Administrator                      │
+└───────────────────────────────┬─────────────────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                             PRESENTATION LAYER                              │
+│                                                                             │
+│  Login │ Dashboard │ AI Assistant │ Governance │ Review Queue │ Analytics   │
+│                 Audit Logs │ Settings │ Profile                           │
+└───────────────────────────────┬─────────────────────────────────────────────┘
+                                │
+                    HTTP (REST API) + WebSocket
+                                │
+                                ▼
+═══════════════════════════════════════════════════════════════════════════════
+                            FASTAPI BACKEND
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              API LAYER                                      │
+│                                                                             │
+│  Chat API │ Governance API │ Review API │ Dashboard API │ Analytics API     │
+└───────────────────────────────┬─────────────────────────────────────────────┘
+                                │
+                                ▼
+═══════════════════════════════════════════════════════════════════════════════
+                            AI PROCESSING LAYER
+═══════════════════════════════════════════════════════════════════════════════
+
+                          ┌───────────────────────────┐
+                          │         AI Agent          │
+                          ├───────────────────────────┤
+                          │ • Understand User Prompt  │
+                          │ • Call Gemini API         │
+                          │ • Generate Action JSON    │
+                          └─────────────┬─────────────┘
+                                        │
+                                        ▼
+                          ┌────────────────────────────┐
+                          │      Planner Agent         │
+                          ├────────────────────────────┤
+                          │ • Validate Action          │
+                          │ • Create Execution Plan    │
+                          │ • Build Workflow           │
+                          └──────────────┬─────────────┘
+                                        │
+                                        ▼
+
+═══════════════════════════════════════════════════════════════════════════════
+                  GRADUATED AUTONOMY ENGINE (PS-9.1)
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         Governance Agent                                    │
+│                     (Workflow Orchestrator)                                 │
+└───────────────┬──────────────────────┬──────────────────────┬───────────────┘
+                │                      │                      │
+                ▼                      ▼                      ▼
+
+      ┌──────────────────┐   ┌──────────────────┐   ┌──────────────────┐
+      │   Risk Engine    │   │  Policy Engine   │   │ Decision Engine  │
+      ├──────────────────┤   ├──────────────────┤   ├──────────────────┤
+      │ Reversibility    │   │ Business Rules   │   │ Auto             │
+      │ Data Scope       │   │ Permissions      │   │ Confirm          │
+      │ Regulation       │   │ Restrictions     │   │ Human Review     │
+      │ LLM Confidence   │   │ Compliance       │   │ Final Decision   │
+      └──────────────────┘   └──────────────────┘   └──────────────────┘
+                │                      │                      │
+                └──────────────────────┴──────────────────────┘
+                                       │
+                                       ▼
+                           Final Governance Decision
+
+═══════════════════════════════════════════════════════════════════════════════
+                          HUMAN OVERSIGHT LAYER
+═══════════════════════════════════════════════════════════════════════════════
+
+                                    AUTO
+                                      │
+                                      │
+                                      ▼
+                              Execution Service
+
+                                    CONFIRM
+                                      │
+                                      ▼
+                              User Confirmation
+
+                                HUMAN REVIEW
+                                      │
+                                      ▼
+                                  Review Agent
+                                      │
+                                      ▼
+                              Approve / Reject
+
+═══════════════════════════════════════════════════════════════════════════════
+                          EXECUTION LAYER
+═══════════════════════════════════════════════════════════════════════════════
+
+                        ┌───────────────────────────┐
+                        │     Execution Service     │
+                        ├───────────────────────────┤
+                        │ Validate Request          │
+                        │ Execute Transaction       │
+                        │ Rollback on Failure       │
+                        └─────────────┬─────────────┘
+                                      │
+                                      ▼
+
+═══════════════════════════════════════════════════════════════════════════════
+                          REPOSITORY LAYER
+═══════════════════════════════════════════════════════════════════════════════
+
+                              Employee Repository
+
+                              Knowledge Repository
+
+                              Document Repository
+
+                              Review Repository
+
+                              Audit Repository
+
+                              Settings Repository
+
+                                      │
+                                      ▼
+
+═══════════════════════════════════════════════════════════════════════════════
+                           DATABASE LAYER
+═══════════════════════════════════════════════════════════════════════════════
+
+                    PostgreSQL Enterprise Database
+
+                                Employees
+
+                                Knowledge Base
+
+                                Documents
+
+                                Review Queue
+
+                                Audit Logs
+
+                                Settings
+
+                                Learning History
+
+                                    │
+                                    ▼
+
+═══════════════════════════════════════════════════════════════════════════════
+                     MONITORING & LEARNING LAYER
+═══════════════════════════════════════════════════════════════════════════════
+
+                                Audit Service
+
+                                    │
+
+                                    ▼
+
+                            Learning Service
+
+                                    │
+
+                                    ▼
+
+                      Dashboard • Analytics • Reports
+```
+
+---
+
 ## 🛠 Technology Stack
 
 | Architecture Layer | Core Technologies | Primary Function |
